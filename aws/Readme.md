@@ -109,7 +109,6 @@ This will create a [default] set of credentials at ~/.aws/credentials
     `terraform init`
 
 ## Creating and destroying your infrastructure
------------------------------------------------
 
 #### Creating a new Jitsi Meet server
     
