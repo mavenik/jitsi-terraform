@@ -9,6 +9,7 @@
 * Anonymous meetings cannot be initiated on this setup. One needs a moderator username and password to be able to initiate meets.  
 
 [Prerequisites](#prerequisites)  
+
 [Initial Setup](#initial-setup)  
 * [Amazon AWS Console](#amazon-aws-console)
   - [Create a new public hosted zone](#create-a-new-public-hosted-zone-for-your-subdomain)
@@ -20,9 +21,10 @@
   - [Configure AWS CLI](#configure-aws-cli)
   - [Clone this repository](#clone-this-repository)
   - [Set variables](#set-variables)
-* [Creating and destroying your infrastructure](#creating-and-destroying-your-infrastructure)
-  - [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
-  - [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
+
+[Creating and destroying your infrastructure](#creating-and-destroying-your-infrastructure)
+* [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
+* [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
 
 ## Prerequisites
 * Registered domain and access to DNS Management
