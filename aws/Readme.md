@@ -9,25 +9,20 @@
 * Anonymous meetings cannot be initiated on this setup. One needs a moderator username and password to be able to initiate meets.  
 
 [Prerequisites](#prerequisites)  
-
-[Initial Setup](#initial-setup)
-
+[Initial Setup](#initial-setup)  
 * [Amazon AWS Console](#amazon-aws-console)
- * [Create a new public hosted zone](#create-a-new-public-hosted-zone-for-your-subdomain)
- * [Note nameservers](#note-nameservers-for-your-public-hosted-zone)
- * [Create AWS IAM User credentials](#create-aws-iam-user-credentials)
-
+  - [Create a new public hosted zone](#create-a-new-public-hosted-zone-for-your-subdomain)
+  - [Note nameservers](#note-nameservers-for-your-public-hosted-zone)
+  - [Create AWS IAM User credentials](#create-aws-iam-user-credentials)
 * [Domain Provider](#domain-provider)
- * [Add NS Records for your subdomain](#add-ns-records-for-your-subdomain)
-
+  - [Add NS Records for your subdomain](#add-ns-records-for-your-subdomain)
 * [Terminal](#terminal)
- * [Configure AWS CLI](#configure-aws-cli)
- * [Clone this repository](#clone-this-repository)
- * [Set variables](#set-variables)
-
+  - [Configure AWS CLI](#configure-aws-cli)
+  - [Clone this repository](#clone-this-repository)
+  - [Set variables](#set-variables)
 * [Creating and destroying your infrastructure](#creating-and-destroying-your-infrastructure)
- * [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
- * [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
+  - [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
+  - [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
 
 ## Prerequisites
 * Registered domain and access to DNS Management
