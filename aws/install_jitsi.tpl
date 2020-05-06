@@ -44,4 +44,5 @@ echo $EMAIL | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh &>> /deb
 echo "Enabling Moderator credentials for $ADMIN_USER" >> /debug.txt
 sed -e 's/authentication \= "anonymous"/authentication \= "internal_plain"/' -i /etc/prosody/conf.d/$HOSTNAME.cfg.lua &>> /debug.txt
 prosodyctl --config /etc/prosody/prosody.cfg.lua $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
+prosodyctl restart
 echo "Setup completed" >> /debug.txt
