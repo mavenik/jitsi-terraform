@@ -5,7 +5,7 @@
 * Creates an EC2 instance with a cloud-init script to install and configure Jitsi Meet.  
 * Creates a security group that acts as firewall to regulate web traffic to your Jitsi Meet instance.  
 * Creates a Route53 A Record under a previously hosted subdomain that points to this EC2 instance. E.g. 511066ad.meet.example.com  
-* Jitsi Meet server can be accessed at https://<UUIDv4>.<hosted-subdomain> E.g. https://511066ad.meet.example.com  
+* Jitsi Meet server can be accessed at `https://<UUIDv4>.<hosted-subdomain>` E.g. `https://511066ad.meet.example.com`  
 * Anonymous meetings cannot be initiated on this setup. One needs a moderator username and password to be able to initiate meets.  
 
 [Prerequisites](#prerequisites)  
@@ -36,7 +36,6 @@
 * AWS CLI - [Installing AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 
 ## Initial setup
------------------
 
 ### Amazon AWS Console
 
@@ -98,16 +97,16 @@ This will create a [default] set of credentials at ~/.aws/credentials
     `cp variables.tf.example variables.tf`  
 2. Refer following table to edit relevant variable values against `default = `
 
-| Variable | Function | Example |
+| Variable | Description | Example |
 | -------- |:--------:| -------:|
 | aws_profile | Name of AWS profile created during `aws configure` | default |
 | aws_region | Name of AWS Region where Jitsi server will be deployed | ap-south-1 for (Mumbai) |
-| email_address | Email used to generate SSL Certificates via Let's Encrypt | email@example.com |
-| admin_username | Moderator username for Jitsi. Anonymous meetings are disabled. | admin@example.com |
+| email_address | Email used to generate SSL Certificates via Let's Encrypt | `email@example.com` |
+| admin_username | Moderator username for Jitsi. Anonymous meetings are disabled. | `admin@example.com` |
 | admin_password | Password for moderator account | Pa$sw0rd |
 | ssh_key_name | (Optional) SSH Key Pair name from AWS Console. Required for debugging via SSH access. | jitsi_key |
 | instance_type | Type of AWS instance for your Jitsi Meet server | m5.xlarge |
-| parent_subdomain | Subdomain under which Jitsi Meet will be hosted. | meet.example.com |
+| parent_subdomain | Subdomain under which Jitsi Meet will be hosted. | `meet.example.com` |
 
 3. Initialize Terraform
     `terraform init`
