@@ -1,6 +1,12 @@
+variable "aws_profile" {
+  description = "AWS Credentials profile"
+  type        = string
+  default     = "default"
+}
+
 variable "aws_region" {
   description = "AWS Region where this server will be hosted"
-  default     = "ap-south-1"
+  type        = string
 }
 variable "email_address" {
   description = "Email to be used for SSL certificate generation using Let's Encrypt"
