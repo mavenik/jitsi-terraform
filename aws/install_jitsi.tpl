@@ -41,8 +41,24 @@ cat /etc/hosts >> /debug.txt
 apt install -y jitsi-meet &>> /debug.txt
 # letsencrypt
 echo $EMAIL | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh &>> /debug.txt
+
+PROSODY_CONF_FILE=/etc/prosody/conf.d/$HOSTNAME.cfg.lua
+sed -e 's/authentication \= "anonymous"/authentication \= "internal_plain"/' -i $PROSODY_CONF_FILE
+echo >> $PROSODY_CONF_FILE
+echo "VirtualHost \"guest.$HOSTNAME\"" >> $PROSODY_CONF_FILE
+echo "    authentication = \"anonymous\"" >> $PROSODY_CONF_FILE
+echo "    allow_empty_token = true" >> $PROSODY_CONF_FILE
+echo "    c2s_require_encryption = false" >> $PROSODY_CONF_FILE
+
+sed -e "s/\/\/ anonymousdomain: .*$/anonymousdomain: 'guest.$HOSTNAME',/" -i /etc/jitsi/meet/$HOSTNAME-config.js
+
+echo "org.jitsi.jicofo.auth.URL=XMPP:$HOSTNAME" >> /etc/jitsi/jicofo/sip-communicator.properties
+
 echo "Enabling Moderator credentials for $ADMIN_USER" >> /debug.txt
-sed -e 's/authentication \= "anonymous"/authentication \= "internal_plain"/' -i /etc/prosody/conf.d/$HOSTNAME.cfg.lua &>> /debug.txt
-prosodyctl --config /etc/prosody/prosody.cfg.lua $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
-prosodyctl restart
+prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
+
+prosodyctl restart &>> /debug.txt
+/etc/init.d/jitsi-videobridge2 restart &>> /debug.txt
+/etc/init.d/jicofo restart &>> /debug.txt
+
 echo "Setup completed" >> /debug.txt
