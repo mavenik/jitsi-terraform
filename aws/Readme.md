@@ -33,8 +33,8 @@
 ## Prerequisites
 * Registered domain and access to DNS Management
 * Amazon AWS Account - [Creating an AWS Account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
-* Terraform - [Installing Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
-* AWS CLI - [Installing AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+* Terraform (required for local execution, can be skipped for Terraform Cloud) - [Installing Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
+* AWS CLI (required for local execution, can be skipped for Terraform Cloud) - [Installing AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 
 ## Initial setup
 
