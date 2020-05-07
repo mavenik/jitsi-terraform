@@ -17,14 +17,18 @@
   - [Create AWS IAM User credentials](#create-aws-iam-user-credentials)
 * [Domain Provider](#domain-provider)
   - [Add NS Records for your subdomain](#add-ns-records-for-your-subdomain)
-* [Terminal](#terminal)
+* [Terraform Cloud](#terraform-cloud)
+  - [Fork this repository](#fork-this-repository)
+  - [Create a workspace](#create-a-workspace-in-terraform-cloud)
+  - [Configure variables](#configure-variables)
+  - [Launching your Jitsi Meet infrastructure](#launching-your-jitsi-meet-infrastructure)
+  - [Destroying your Jitsi Meet infrastructure](#destroying-your-jitsi-meet-infrastructure)
+* [Terminal (local execution)](#terminal)
   - [Configure AWS CLI](#configure-aws-cli)
   - [Clone this repository](#clone-this-repository)
   - [Set variables](#set-variables)
-
-[Creating and destroying your infrastructure](#creating-and-destroying-your-infrastructure)
-* [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
-* [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
+  - [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
+  - [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
 
 ## Prerequisites
 * Registered domain and access to DNS Management
@@ -74,6 +78,29 @@ Note the **Access key ID** and **Secret access key**. We will use this to config
 
 It should return AWS nameservers in response.
 
+### Terraform Cloud
+
+#### Fork this repository  
+Fork this repository([https://github.com/mavenik/jitsi-terraform](https://github.com/mavenik/jitsi-terraform)) on Github
+
+#### Create a workspace in Terraform Cloud  
+1. [Sign Up or Sign In](https://github.com/mavenik/jitsi-terraform) to Terraform Cloud
+2. Create a new workspace by clicking on *+New Workspace*. If you just signed up, you will be taken to workspace creation flow directly.
+3. Follow instructions to connect Github and select your fork of this repository.
+4. On *Configure Settings* tab of workspace creation, click on *Advanced* and type `aws` as *Terraform Working Directory*
+5. Click on *Create Workspace* to finalize workspace creation
+
+#### Configure variables  
+1. After a workspace is created, you will be prompted to set variables for this workspace. Click on *Configure variables*.
+2. Under *Terraform Variables*, click on *+Add variable* to add variables from the list of variables. You could skip the optional variables. [Click here](#set-variables) to see the list of variables.
+3. Under *Environment Variables*, add *AWS_ACCESS_KEY_ID* and *AWS_SECRET_ACCESS_KEY* variables. Use values [obtained after IAM user creation](#create-aws-iam-credentials). Choose the checkbox against *Sensitive* to mask this information.
+
+#### Launching your Jitsi Meet infrastructure  
+Within your workspace, click on *Queue Plan* to apply your Terraform configuration. By default, Terraform Cloud will ask for a confirmation before applying changes.
+
+#### Destroying your Jitsi Meet infrastructure
+Within your workspace, navigate to *Settings* -> *Destruction and Deletion* and click on *Queue destroy plan*. You will be prompted for a confirmation by typing the workspace name and then again before destroying your infrastructure.
+
 ### Terminal
 
 #### Configure AWS CLI
@@ -107,8 +134,6 @@ This will create a [default] set of credentials at ~/.aws/credentials
 
 3. Initialize Terraform
     `terraform init`
-
-## Creating and destroying your infrastructure
 
 #### Creating a new Jitsi Meet server
     
