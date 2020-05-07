@@ -1,0 +1,6 @@
+aws_region = "ap-south-1"
+email_address = "email@example.com"
+admin_username = "admin"
+admin_password = "somestrongpassword"
+instance_type = "m5.xlarge"
+parent_subdomain = "meet.example.com"

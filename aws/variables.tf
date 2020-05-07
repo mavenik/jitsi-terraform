@@ -1,38 +1,34 @@
-variable "aws_profile" {
-  description = "AWS Credentials Profile name"
-  default     = "default"
-}
-
 variable "aws_region" {
   description = "AWS Region where this server will be hosted"
   default     = "ap-south-1"
 }
 variable "email_address" {
   description = "Email to be used for SSL certificate generation using Let's Encrypt"
-  default     = "email@example.com"
+  type        = string
 }
 
 variable "admin_username" {
   description = "Moderator username. Only this user will be allowed to start meets."
-  default     = "admin"
+  type        = string
 }
 
 variable "admin_password" {
   description = "Password for moderator user. Only this user will be allowed to start meets."
-  default     = "somestrongpassword"
+  type        = string
 }
 
 variable "ssh_key_name" {
   description = "(Optional) SSH Key Pair name as set up in AWS. This is for debugging with SSH access."
-  default     = "your-ssh-keypair-name"
+  type        = string
+  default     = ""
 }
 
 variable "instance_type" {
   description = "AWS Instance type for this Jitsi instance"
-  default     = "m5.xlarge"
+  type        = string
 }
 
 variable "parent_subdomain" {
   description = "Parent domain/subdomain. Server will be hosted at https://<UUIDv4>.parent_subdomain"
-  default     = "subdomain.example.com"
+  type        = string
 }

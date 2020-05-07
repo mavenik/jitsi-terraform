@@ -90,13 +90,13 @@ This will create a [default] set of credentials at ~/.aws/credentials
     cd jitsi-terraform/aws
 
 #### Set variables  
-1. Copy `variables.tf.example` as  
-    `cp variables.tf.example variables.tf`  
-2. Refer following table to edit relevant variable values against `default = `
+1. Copy `terraform.tfvars.example` as  
+    `cp terraform.tfvars.example terraform.tfvars`  
+2. Refer following table to edit relevant variable values
 
 | Variable | Description | Example |
 | -------- |:--------:| -------:|
-| aws_profile | Name of AWS profile created during `aws configure` | default |
+| aws_profile | (Optional) Name of AWS profile created during `aws configure` | default |
 | aws_region | Name of AWS Region where Jitsi server will be deployed | ap-south-1 for (Mumbai) |
 | email_address | Email used to generate SSL Certificates via Let's Encrypt | `email@example.com` |
 | admin_username | Moderator username for Jitsi. Anonymous meetings are disabled. | `admin@example.com` |
