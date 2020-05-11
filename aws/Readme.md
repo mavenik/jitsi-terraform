@@ -4,7 +4,7 @@
 
 * Creates an EC2 instance with a cloud-init script to install and configure Jitsi Meet.  
 * Creates a security group that acts as firewall to regulate web traffic to your Jitsi Meet instance.  
-* Creates a Route53 A Record under a previously hosted subdomain that points to this EC2 instance. E.g. 511066ad.meet.example.com  
+* Creates a Route53 A Record under a previously hosted subdomain that points to this EC2 instance. E.g. `511066ad.meet.example.com`  
 * Jitsi Meet server can be accessed at `https://<UUIDv4>.<hosted-subdomain>` E.g. `https://511066ad.meet.example.com`  
 * Anonymous meetings cannot be initiated on this setup. One needs a moderator username and password to be able to initiate meets.  
 
@@ -128,7 +128,8 @@ This will create a [default] set of credentials at ~/.aws/credentials
 | email_address | Email used to generate SSL Certificates via Let's Encrypt | `email@example.com` |
 | admin_username | Moderator username for Jitsi. Anonymous meetings are disabled. | `admin@example.com` |
 | admin_password | Password for moderator account | Pa$sw0rd |
-| ssh_key_name | (Optional) SSH Key Pair name from AWS Console. Required for debugging via SSH access. | jitsi_key |
+| enable_ssh_access | (Optional) Enable SSH access via pre-imported SSH key pair. | false |
+| ssh_key_name | SSH Key Pair name from AWS Console. Required for debugging via SSH access when `enable_ssh_access` is set. | jitsi_key |
 | instance_type | Type of AWS instance for your Jitsi Meet server | m5.xlarge |
 | parent_subdomain | Subdomain under which Jitsi Meet will be hosted. | `meet.example.com` |
 
@@ -144,7 +145,7 @@ Type 'yes' when prompted and hit enter.
 This will create the following resources:
 1. An Amazon EC2 instance
 2. A Route53 DNS A Record with `<UUIDv4>.<parent_subdomain>` E.g. `511066ad.meet.example.com` pointing to the public IPv4 address of newly created Amazon EC2 instance.
-3. Security group that acts as a firewall for our EC2 instance. Allows traffic on `UDP 10000` (jitsi-videobridge) `TCP 80` (HTTP) `TCP 443` (HTTPS) and `UDP 53` (DNS). SSH access can optionally be enabled by uncommenting relevant lines in `main.tf`, but is not enabled by default.
+3. Security group that acts as a firewall for our EC2 instance. Allows traffic on `UDP 10000` (jitsi-videobridge) `TCP 80` (HTTP) `TCP 443` (HTTPS) and `UDP 53` (DNS). SSH access can optionally be enabled by setting `enable_ssh_access` variable to true.
 
 The command will print address of server host and an HTTPS URL for your Jitsi Meet server. E.g. `https://511066ad.meet.example.com`
 

@@ -38,8 +38,8 @@ resource "aws_instance" "jitsi" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_connections_jitsi-meet.id]
-  #  key_name = var.ssh_key_name
-  user_data = data.template_file.install_script.rendered
+  key_name               = var.enable_ssh_access ? var.ssh_key_name : null
+  user_data              = data.template_file.install_script.rendered
   tags = {
     Name = "jitsi-meet-server-${random_id.server_id.hex}"
   }
@@ -61,12 +61,15 @@ resource "aws_security_group" "allow_connections_jitsi-meet" {
   name        = "allow_connections_jitsi-meet"
   description = "Allow traffic on UDP 10000 (JVB) TCP 443 (HTTPS) UDP 53 (DNS)"
 
-  #  ingress {
-  #    from_port   = 22
-  #    to_port     = 22
-  #    protocol    = "tcp"
-  #    cidr_blocks = ["0.0.0.0/0"]
-  #  }
+  dynamic "ingress" {
+    for_each = var.enable_ssh_access ? [1] : []
+    content {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
 
   ingress {
     from_port   = 10000
