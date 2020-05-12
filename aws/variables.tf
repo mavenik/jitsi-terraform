@@ -32,6 +32,7 @@ variable "enable_ssh_access" {
 variable "ssh_key_name" {
   description = "(Optional) SSH Key Pair name as set up in AWS. This is for debugging with SSH access."
   type        = string
+  default     = null
 }
 
 variable "instance_type" {
