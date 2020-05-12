@@ -3,13 +3,22 @@ provider "aws" {
   region  = var.aws_region
 }
 
+data "template_file" "install_jibri" {
+  template = "${file("install_jibri.tpl")}"
+  vars = {
+    jibri_auth_password     = random_id.jibriauthpass.hex
+    jibri_recorder_password = random_id.jibrirecorderpass.hex
+  }
+}
+
 data "template_file" "install_script" {
   template = "${file("install_jitsi.tpl")}"
   vars = {
-    email_address  = "${var.email_address}"
-    admin_username = "${var.admin_username}"
-    admin_password = "${var.admin_password}"
-    domain_name    = "${random_id.server_id.hex}.${var.parent_subdomain}"
+    email_address             = "${var.email_address}"
+    admin_username            = "${var.admin_username}"
+    admin_password            = "${var.admin_password}"
+    domain_name               = "${random_id.server_id.hex}.${var.parent_subdomain}"
+    jibri_installation_script = var.enable_recording_streaming ? data.template_file.install_jibri.rendered : "echo \"Jibri installation is disabled\" >> /debug.txt"
   }
 }
 
@@ -45,6 +54,12 @@ resource "aws_instance" "jitsi" {
   }
 }
 
+resource "random_id" "jibriauthpass" {
+  byte_length = 8
+}
+resource "random_id" "jibrirecorderpass" {
+  byte_length = 8
+}
 resource "random_id" "server_id" {
   byte_length = 4
 }
@@ -109,6 +124,29 @@ resource "aws_security_group" "allow_connections_jitsi-meet" {
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 4446
+    to_port     = 4446
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 4446
+    to_port     = 4446
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  dynamic "egress" {
+    for_each = var.enable_recording_streaming ? [1] : []
+    content {
+      from_port   = 1935
+      to_port     = 1935
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
   tags = {
     Name = "allow_connections_jitsi-meet"
   }

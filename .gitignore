@@ -5,3 +5,4 @@ terraform.tfstate.backup
 *.swo
 terraform.tfvars
 *.auto.tfvars
+.DS_Store

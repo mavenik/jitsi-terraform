@@ -43,3 +43,9 @@ variable "parent_subdomain" {
   description = "Parent domain/subdomain. Server will be hosted at https://<UUIDv4>.parent_subdomain"
   type        = string
 }
+
+variable "enable_recording_streaming" {
+  description = "Enables recording and streaming capability with Jibri"
+  type        = bool
+  default     = false
+}

@@ -38,9 +38,9 @@ cat /etc/resolv.conf >> /debug.txt
 whoami >> /debug.txt
 cat /etc/hosts >> /debug.txt
 # Install Jitsi
-apt install -y jitsi-meet &>> /debug.txt
+apt install -y jitsi-meet >> /debug.txt
 # letsencrypt
-echo $EMAIL | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh &>> /debug.txt
+echo $EMAIL | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh >> /debug.txt
 
 PROSODY_CONF_FILE=/etc/prosody/conf.d/$HOSTNAME.cfg.lua
 sed -e 's/authentication \= "anonymous"/authentication \= "internal_plain"/' -i $PROSODY_CONF_FILE
@@ -54,11 +54,14 @@ sed -e "s/\/\/ anonymousdomain: .*$/anonymousdomain: 'guest.$HOSTNAME',/" -i /et
 
 echo "org.jitsi.jicofo.auth.URL=XMPP:$HOSTNAME" >> /etc/jitsi/jicofo/sip-communicator.properties
 
+# Enable local STUN server
+sed -e "s/org\.ice4j\.ice\.harvest\.STUN_MAPPING_HARVESTER_ADDRESSES=.*/org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES=$HOSTNAME:4446/" -i /etc/jitsi/videobridge/sip-communicator.properties
+
 echo "Enabling Moderator credentials for $ADMIN_USER" >> /debug.txt
 prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
 
-prosodyctl restart &>> /debug.txt
-/etc/init.d/jitsi-videobridge2 restart &>> /debug.txt
-/etc/init.d/jicofo restart &>> /debug.txt
+${jibri_installation_script}
 
 echo "Setup completed" >> /debug.txt
+echo "Rebooting..." >> /debug.txt
+reboot
