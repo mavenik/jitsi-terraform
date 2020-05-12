@@ -130,6 +130,7 @@ This will create a [default] set of credentials at ~/.aws/credentials
 | admin_password | Password for moderator account | Pa$sw0rd |
 | enable_ssh_access | (Optional) Enable SSH access via pre-imported SSH key pair. | false |
 | ssh_key_name | SSH Key Pair name from AWS Console. Required for debugging via SSH access when `enable_ssh_access` is set. | jitsi_key |
+| enable_recording_streaming | (Optional) Enable support for recording and Live streaming. | false |
 | instance_type | Type of AWS instance for your Jitsi Meet server | m5.xlarge |
 | parent_subdomain | Subdomain under which Jitsi Meet will be hosted. | `meet.example.com` |
 
