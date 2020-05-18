@@ -144,7 +144,7 @@ To stream, start all your streams on streaming services like Facebook, Periscope
 Click on **Start Live Streaming**->**Enter any dummy BUT VALID YouTube stream key E.g. `cafe-dead-face-fab9`**->**Start streaming**  
 Jitsi Meet requires a valid YouTube stream key, so we provide a dummy but valid one. Our proxy RTMP server then relays incoming stream to multiple pre-configured endpoints.
 
-All recordings whether streamed or recorded, will be available at `https://my-server.net/recordings/` E.g. `https://511066ad.meet.example.com/recordings/`
+All recordings whether streamed or recorded, will be available at `https://my-server.net/recordings/` E.g. `https://511066ad.meet.example.com/recordings/`. This endpoint will require basic auth and use the same credentials as Moderator/Host username and password set using `admin_username` and `admin_password` variables respectively.
 
 | Variable | Description | Default |
 | -------- |:-----------:| -------:|
