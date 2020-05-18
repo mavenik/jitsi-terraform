@@ -27,6 +27,7 @@
   - [Configure AWS CLI](#configure-aws-cli)
   - [Clone this repository](#clone-this-repository)
   - [Set variables](#set-variables)
+    - [Simulcast Streaming and Recording (Optional)](#simulcast-streaming-and-recording-with-jibri-optional)
   - [Creating your Jitsi Meet Server](#creating-your-jitsi-meet-server)
   - [Destroying your Jitsi Meet Server](#destroying-your-jitsi-meet-server)
 
