@@ -29,7 +29,7 @@ data "template_file" "twitch_stream" {
   template = file("./templates/jibri/twitch_stream.tpl")
   vars = {
     twitch_ingest_endpoint = var.twitch_ingest_endpoint
-    twitch_stream_key = var.twitch_stream_key
+    twitch_stream_key      = var.twitch_stream_key
   }
 }
 
@@ -57,7 +57,7 @@ data "template_file" "install_jibri" {
     record_stream           = var.record_all_streaming ? data.template_file.stream_record.rendered : "    record off;"
     facebook_stream         = (length(var.facebook_stream_key) != 0) ? data.template_file.facebook_stream.rendered : "# Facebook stream was not configured"
     periscope_stream        = (length(var.periscope_stream_key) != 0) ? data.template_file.periscope_stream.rendered : "# Periscope stream was not configured"
-    twitch_stream        = (length(var.twitch_stream_key) != 0) ? data.template_file.twitch_stream.rendered : "# Twitch stream was not configured"
+    twitch_stream           = (length(var.twitch_stream_key) != 0) ? data.template_file.twitch_stream.rendered : "# Twitch stream was not configured"
     youtube_stream          = (length(var.youtube_stream_key) != 0) ? data.template_file.youtube_stream.rendered : "# YouTube stream was not configured"
     generic_streams         = (length(var.rtmp_stream_urls) != 0) ? join("\n    ", data.template_file.generic_streams.*.rendered) : "# No generic stream URLs were configured"
   }

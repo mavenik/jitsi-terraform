@@ -89,12 +89,12 @@ variable "youtube_stream_key" {
 
 variable "twitch_ingest_endpoint" {
   description = "(Optional) Ingest endpoint for Twitch. E.g. rtmp://live-mrs.twitch.tv/app"
-  default = "rtmp://live-sin.twitch.tv/app"
+  default     = "rtmp://live-sin.twitch.tv/app"
 }
 
 variable "twitch_stream_key" {
   description = "(Optional) Streaming key for Twitch"
-  default = ""
+  default     = ""
 }
 
 variable "rtmp_stream_urls" {
