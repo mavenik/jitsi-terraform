@@ -143,18 +143,18 @@ To stream, start all your streams on streaming services like Facebook, Periscope
 Click on **Start Live Streaming**->**Enter any dummy BUT VALID YouTube stream key E.g. `cafe-dead-face-fab9`**->**Start streaming**  
 Jitsi Meet requires a valid YouTube stream key, so we provide a dummy but valid one. Our proxy RTMP server then relays incoming stream to multiple pre-configured endpoints.
 
-| Variable | Description | Example | Default |
-| -------- |:-----------:|:-------:| -------:|
-| enable_recording_streaming | Enables recording and streaming capability with Jibri | true | false |
-| recorded_stream_dir | Base directory to save recorded meets. Should be accessible via www-data user or group | /usr/share/recordings | /var/www/html/recordings |
-| record_all_streaming | Implicitly records every streaming session if enabled | true | false |
-| facebook_stream_key | Stream key for Facebook | 10176516051234195?s_bl=1&s_sc=101639654517234195&s_sw=0&s_vt=api-s&a=Lcx45-GjH5XffDEs | Empty string |
-| youtube_stream_key | Stream key for YouTube | a3d5-cf3b-745a-cfe3 | Empty string |
-| twitch_ingest_endpoint | RTMP server or ingest endpoint for Twitch | rtmp://live-mrs.twitch.tv/app | rtmp://live-sin.twitch.tv/app |
-| twitch_stream_key | Stream key for Twitch | live_149027534_AxvfD659owR4E2e4er3VWodgSDvtqMCJ | Empty string |
-| periscope_server_url | RTMP server URL for Periscope/Twitter | rtmp://de.pscp.tv:80/x | rtmp://in.pscp.tv:80/x |
-| periscope_stream_key | Stream key for Periscope/Twitter | qm46uy902x8f | Empty string |
-| rtmp_stream_urls | Generic RTMP URLs | ["rtmp://generic-stream-server/live/stream-key", "rtmp://example.com/app"] | [] |
+| Variable | Description | Default |
+| -------- |:-----------:| -------:|
+| enable_recording_streaming | Enables recording and streaming capability with Jibri | false |
+| recorded_stream_dir | Base directory to save recorded meets. Should be accessible via www-data user or group | /var/www/html/recordings |
+| record_all_streaming | Implicitly records every streaming session if enabled | false |
+| facebook_stream_key | Stream key for Facebook | Empty string |
+| youtube_stream_key | Stream key for YouTube | Empty string |
+| twitch_ingest_endpoint | RTMP server or ingest endpoint for Twitch | rtmp://live-sin.twitch.tv/app |
+| twitch_stream_key | Stream key for Twitch | Empty string |
+| periscope_server_url | RTMP server URL for Periscope/Twitter | rtmp://in.pscp.tv:80/x |
+| periscope_stream_key | Stream key for Periscope/Twitter | Empty string |
+| rtmp_stream_urls | Generic RTMP URLs | [] |
 
 3. Initialize Terraform
     `terraform init`
