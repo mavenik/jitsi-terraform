@@ -3,7 +3,7 @@ export JIBRI_AUTH_PASSWORD="${jibri_auth_password}"
 export JIBRI_RECORDER_PASSWORD="${jibri_recorder_password}"
 
 # Install generic linux packages for sound
-apt install -y linux-generic >> /debug.txt
+DEBIAN_FRONTEND=noninteractive apt install -yq linux-generic >> /debug.txt
 
 # Configure ALSA Module
 echo "options snd-aloop enable=1,1,1,1,1 index=0,1,2,3,4" > /etc/modprobe.d/alsa-loopback.conf

@@ -63,5 +63,4 @@ prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME 
 ${jibri_installation_script}
 
 echo "Setup completed" >> /debug.txt
-echo "Rebooting..." >> /debug.txt
-reboot
+${reboot_script}

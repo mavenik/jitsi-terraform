@@ -71,6 +71,7 @@ data "template_file" "install_script" {
     admin_password            = "${var.admin_password}"
     domain_name               = "${random_id.server_id.hex}.${var.parent_subdomain}"
     jibri_installation_script = var.enable_recording_streaming ? data.template_file.install_jibri.rendered : "echo \"Jibri installation is disabled\" >> /debug.txt"
+    reboot_script             = var.enable_recording_streaming ? "echo \"Rebooting...\" >> /debug.txt\nreboot" : "echo \".\" >> /debug.txt"
   }
 }
 
