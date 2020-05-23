@@ -5,6 +5,11 @@ export EMAIL="${email_address}"
 ADMIN_USER="${admin_username}"
 ADMIN_PASSWORD="${admin_password}"
 
+mkdir -p /var/www/html
+chown -R www-data.www-data /var/www/html
+echo "{\"status\": \"Installation in progress\"}" >> /var/www/html/status.json
+chown www-data.www-data /var/www/html/status.json
+
 echo -e "nameserver 8.8.8.8\nnameserver 8.8.4.4" >> /etc/resolv.conf
 # disable ipv6
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -12,7 +17,13 @@ sysctl -w net.ipv6.conf.default.disable_ipv6=1
 # set hostname
 hostnamectl set-hostname $HOSTNAME
 echo -e "127.0.0.1 localhost $HOSTNAME" >> /etc/hosts
+
+# Prosody 0.11.x is required for password and secure domain to work with Jibri
+echo deb http://packages.prosody.im/debian $(lsb_release -sc) main | tee -a /etc/apt/sources.list
+wget https://prosody.im/files/prosody-debian-packages.key -O- | apt-key add -
 apt update
+apt install -y prosody
+
 # install Java
 apt install -y openjdk-8-jre-headless
 echo "JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")" | sudo tee -a /etc/profile
@@ -39,6 +50,16 @@ whoami >> /debug.txt
 cat /etc/hosts >> /debug.txt
 # Install Jitsi
 apt install -y jitsi-meet >> /debug.txt
+
+cat <<~STATUSLOCATION > status.txt
+location = /status.json {
+  alias /var/www/html/status.json;
+  access_log /var/log/nginx/status.access.log;
+}
+~STATUSLOCATION
+sed '/error_page 404 \/static\/404\.html/r status.txt' -i /etc/nginx/sites-enabled/$HOSTNAME.conf
+rm status.txt
+
 # letsencrypt
 echo $EMAIL | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh >> /debug.txt
 
@@ -61,6 +82,9 @@ echo "Enabling Moderator credentials for $ADMIN_USER" >> /debug.txt
 prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
 
 ${jibri_installation_script}
+
+echo "{\"status\": \"Installation completed\"}" >> /var/www/html/status.json
+chown www-data.www-data /var/www/html/status.json
 
 echo "Setup completed" >> /debug.txt
 ${reboot_script}
