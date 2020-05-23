@@ -96,7 +96,6 @@ VirtualHost "recorder.$HOSTNAME"
     authentication = "internal_plain"
 ~ENDOFVHOST
 sed -e "s/Component \"internal.auth.$HOSTNAME\" \"muc\"/&\n    muc_room_cache_size = 1000/" -i $PROSODY_CONF_FILE
-sed -e "s/\"muc_domain_mapper\";/&\n        \"auth_recorder\";/" -i $PROSODY_CONF_FILE
 
 echo "Setting Jibri users" >> /debug.txt
 prosodyctl --config /etc/prosody/prosody.cfg.lua register jibri auth.$HOSTNAME $JIBRI_AUTH_PASSWORD >> /debug.txt
