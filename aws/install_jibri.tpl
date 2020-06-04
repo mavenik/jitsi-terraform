@@ -69,22 +69,6 @@ update-grub
 
 # Configure prosody
 echo "Configuring prosody for Jibri" >> /debug.txt
-cat <<~MUC_COMPONENT >> /usr/share/jitsi-meet/prosody-plugins/mod_auth_recorder.lua
-local MUC_NS = "http://jabber.org/protocol/muc";
-local jid = require "util.jid";
-module:hook("muc-occupant-pre-join", function (event)
-  local room, stanza = event.room, event.stanza;
-
-  local user, domain, res = jid.split(event.stanza.attr.from);
-  log("info", "--------------> user %s domain %s res %s pass %s", tostring(user),tostring(domain),tostring(res),tostring(room:get_password())); 
-
-  if user=='recorder' and domain=='recorder.$HOSTNAME' then
-    local join = stanza:get_child("x", MUC_NS);
-    join:tag("password", { xmlns = MUC_NS }):text(room:get_password());
-  end;
-end);
-~MUC_COMPONENT
-
 PROSODY_CONF_FILE="/etc/prosody/conf.d/$HOSTNAME.cfg.lua"
 echo "Prosody Config: $PROSODY_CONF_FILE" >> /debug.txt
 cat <<~ENDOFVHOST >> $PROSODY_CONF_FILE
