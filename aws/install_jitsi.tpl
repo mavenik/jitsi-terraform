@@ -62,5 +62,9 @@ prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME 
 
 ${jibri_installation_script}
 
+prosodyctl restart &>> /debug.txt
+/etc/init.d/jitsi-videobridge2 restart &>> /debug.txt
+/etc/init.d/jicofo restart &>> /debug.txt
+
 echo "Setup completed" >> /debug.txt
 ${reboot_script}
