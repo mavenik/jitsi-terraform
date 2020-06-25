@@ -1,0 +1,43 @@
+{
+  "builders": [
+    {
+      "communicator": "ssh",
+      "source_path": "bento/ubuntu-18.04",
+      "provider": "virtualbox",
+      "type": "vagrant"
+    },
+    {
+      "region": "{{user `aws_region`}}",
+      "type": "amazon-ebs",
+      "ami_name": "packer-jitsi-ami-{{timestamp}}",
+      "instance_type": "m5.xlarge",
+      "source_ami_filter": {
+        "filters": {
+          "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+          "virtualization-type": "hvm",
+          "root-device-type": "ebs"
+        },
+        "owners": "099720109477",
+        "most_recent": true
+      },
+      "ssh_username": "ubuntu",
+      "ssh_interface": "public_dns",
+      "ssh_keypair_name": "Tesseract",
+      "ssh_agent_auth": true
+    }
+  ],
+  "variables": {
+    "domain_name": "meet.example.com",
+    "aws_region": "ap-south-1"
+  },
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./playbooks/jitsi.yml",
+      "extra_arguments": [
+        "--extra-vars",
+        "domain_name={{user `domain_name`}}"
+      ]
+    }
+  ]
+}

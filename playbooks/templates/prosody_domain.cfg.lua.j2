@@ -1,0 +1,87 @@
+plugin_paths = { "/usr/share/jitsi-meet/prosody-plugins/" }
+
+-- domain mapper options, must at least have domain base set to use the mapper
+muc_mapper_domain_base = "{{domain_name}}";
+
+turncredentials_secret = "{{turn_secret}}";
+
+turncredentials = {
+  { type = "stun", host = "{{domain_name}}", port = "4446" },
+  { type = "turn", host = "{{domain_name}}", port = "4446", transport = "udp" },
+  { type = "turns", host = "{{domain_name}}", port = "443", transport = "tcp" }
+};
+
+cross_domain_bosh = false;
+consider_bosh_secure = true;
+https_ports = { }; -- Remove this line to prevent listening on port 5284
+local_interfaces = {"127.0.0.1"};
+
+VirtualHost "{{domain_name}}"
+        -- enabled = false -- Remove this line to enable this host
+        authentication = "internal_plain"
+        -- Properties below are modified by jitsi-meet-tokens package config
+        -- and authentication above is switched to "token"
+        --app_id="example_app_id"
+        --app_secret="example_app_secret"
+        -- Assign this host a certificate for TLS, otherwise it would use the one
+        -- set in the global section (if any).
+        -- Note that old-style SSL on port 5223 only supports one certificate, and will always
+        -- use the global one.
+        ssl = {
+                key = "/etc/prosody/certs/{{domain_name}}.key";
+                certificate = "/etc/prosody/certs/{{domain_name}}.crt";
+        }
+        speakerstats_component = "speakerstats.{{domain_name}}"
+        conference_duration_component = "conferenceduration.{{domain_name}}"
+        -- we need bosh
+        modules_enabled = {
+            "bosh";
+            "pubsub";
+            "ping"; -- Enable mod_ping
+            "speakerstats";
+            "turncredentials";
+            "conference_duration";
+        }
+        c2s_require_encryption = false
+
+Component "conference.{{domain_name}}" "muc"
+    storage = "none"
+    modules_enabled = {
+        "muc_meeting_id";
+        "muc_domain_mapper";
+        -- "token_verification";
+    }
+    admins = { "focus@auth.{{domain_name}}" }
+    muc_room_locking = false
+    muc_room_default_public_jids = true
+
+-- internal muc component
+Component "internal.auth.{{domain_name}}" "muc"
+    storage = "none"
+    modules_enabled = {
+      "ping";
+    }
+    admins = { "focus@auth.{{domain_name}}", "jvb@auth.{{domain_name}}" }
+    muc_room_locking = false
+    muc_room_default_public_jids = true
+
+VirtualHost "auth.{{domain_name}}"
+    ssl = {
+        key = "/etc/prosody/certs/auth.{{domain_name}}.key";
+        certificate = "/etc/prosody/certs/auth.{{domain_name}}.crt";
+    }
+    authentication = "internal_plain"
+
+Component "focus.{{domain_name}}"
+    component_secret = "{{jicofo_secret}}"
+
+Component "speakerstats.{{domain_name}}" "speakerstats_component"
+    muc_component = "conference.{{domain_name}}"
+
+Component "conferenceduration.{{domain_name}}" "conference_duration_component"
+    muc_component = "conference.{{domain_name}}"
+
+VirtualHost "guest.{{domain_name}}"
+    authentication = "anonymous"
+    allow_empty_token = true
+    c2s_require_encryption = false

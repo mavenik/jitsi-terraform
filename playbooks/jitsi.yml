@@ -1,0 +1,146 @@
+- name: Provision Jitsi standalone server
+  hosts: default
+  become: true
+
+  tasks:
+    - name: Set Hostname
+      block:
+        - hostname:
+            name: "{{ domain_name }}"
+        - template:
+            src: ./templates/hosts.j2
+            dest: /etc/hosts
+        - name: Set debconf selection jvb-hostname
+          debconf:
+            name: jitsi-videobridge
+            question: jitsi-videobridge/jvb-hostname
+            value: "{{ domain_name }}"
+            vtype: string
+        - name: Set debconf selection jvb-hostname
+          debconf:
+            name: jitsi-videobridge
+            question: jitsi-meet/jvb-hostname
+            value: "{{ domain_name }}"
+            vtype: string
+    - name: Set prosody configuration
+      template:
+        src: ./templates/prosody_domain.cfg.lua.j2
+        dest: "/etc/prosody/conf.avail/{{domain_name}}.cfg.lua"
+    - name: Remove old configuration for Prosody
+      file:
+        path: /etc/prosody/conf.d/meet.example.com.cfg.lua
+        state: absent
+    - name: "Link fresh configuration for {{domain_name}}"
+      file:
+        src: "/etc/prosody/conf.avail/{{domain_name}}.cfg.lua"
+        dest: "/etc/prosody/conf.d/{{domain_name}}.cfg.lua"
+        state: link
+    - name: Copy answers file
+      copy:
+        src: ./templates/prosody_cert_answers.txt
+        dest: /tmp/prosody_cert_answers.txt
+    - name: "Generate prosody cert for {{domain_name}}"
+      shell: "prosodyctl cert generate {{domain_name}} < /tmp/prosody_cert_answers.txt"
+    - name: "Generate prosody cert for auth.{{domain_name}}"
+      shell: "prosodyctl cert generate auth.{{domain_name}} < /tmp/prosody_cert_answers.txt"
+    - name: "Link prosody certs"
+      block:
+        - file:
+            src: "/var/lib/prosody/{{domain_name}}.crt"
+            dest: "/etc/prosody/certs/{{domain_name}}.crt"
+            state: link
+        - file:
+            src: "/var/lib/prosody/{{domain_name}}.key"
+            dest: "/etc/prosody/certs/{{domain_name}}.key"
+            state: link
+        - file:
+            src: "/var/lib/prosody/auth.{{domain_name}}.crt"
+            dest: "/etc/prosody/certs/auth.{{domain_name}}.crt"
+            state: link
+        - file:
+            src: "/var/lib/prosody/auth.{{domain_name}}.key"
+            dest: "/etc/prosody/certs/auth.{{domain_name}}.key"
+            state: link
+    - name: "Link ca-certs with prosody certs"
+      file:
+        src: "/var/lib/prosody/auth.{{domain_name}}.crt"
+        dest: "/usr/local/share/ca-certificates/auth.{{domain_name}}.crt"
+        state: link
+    - name: Update CA-certs
+      shell: "update-ca-certificates -f"
+    - name: "Register focus user for auth.{{domain_name}}"
+      shell: "prosodyctl register focus auth.{{domain_name}} {{jicofo_focus_password}}"
+    - name: "Register jvb user for auth.{{domain_name}}"
+      shell: "prosodyctl register jvb auth.{{domain_name}} {{jvb_secret}}"
+    - name: "Register moderator"
+      shell: "prosodyctl register {{admin_username}} {{domain_name}} {{admin_password}}"
+    - name: Copy Jitsi templates
+      block:
+        - template:
+            src: ./templates/jicofo_config.j2
+            dest: /etc/jitsi/jicofo/config
+        - template:
+            src: ./templates/jicofo_sip_communicator.j2
+            dest: /etc/jitsi/jicofo/sip-communicator.properties
+        - template:
+            src: ./templates/meet_domain_config.j2
+            dest: "/etc/jitsi/meet/{{domain_name}}-config.js"
+        - template:
+            src: ./templates/videobridge_config.j2
+            dest: /etc/jitsi/videobridge/config
+        - template:
+            src: ./templates/videobridge_sip_communicator.j2
+            dest: /etc/jitsi/videobridge/sip-communicator.properties
+    - name: Set TURN server configuration
+      template:
+        src: ./templates/turnserver.j2
+        dest: /etc/turnserver.conf
+    - name: Set Nginx configuration
+      block:
+        - template:
+            src: ./templates/nginx_domain.j2
+            dest: "/etc/nginx/sites-available/{{domain_name}}.conf"
+        - file:
+            src: "/etc/nginx/sites-available/{{domain_name}}.conf"
+            dest: "/etc/nginx/sites-enabled/{{domain_name}}.conf"
+            state: link
+        - file:
+            path: "/etc/nginx/sites-enabled/meet.example.com.conf"
+            state: absent
+    - name: Generate self-signed certificates
+      block:
+        - openssl_privatekey:
+            path: "/etc/jitsi/meet/{{domain_name}}.key"
+        - openssl_csr:
+            path: "/etc/jitsi/meet/{{domain_name}}.csr"
+            privatekey_path: "/etc/jitsi/meet/{{domain_name}}.key"
+            common_name: "{{domain_name}}"
+        - openssl_certificate:
+            path: "/etc/jitsi/meet/{{domain_name}}.crt"
+            privatekey_path: "/etc/jitsi/meet/{{domain_name}}.key"
+            csr_path: "/etc/jitsi/meet/{{domain_name}}.csr"
+            provider: selfsigned
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
+    - name: Invoke Let's Encrypt install script
+      shell: "echo {{email}} | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh"
+      when: local_mode is not defined or not local_mode
+    - name: Restart services
+      block:
+        - systemd:
+            name: coturn
+            state: restarted
+        - systemd:
+            name: prosody
+            state: restarted
+        - systemd:
+            name: jitsi-videobridge2
+            state: restarted
+        - systemd:
+            name: jicofo
+            state: restarted
+        - systemd:
+            name: nginx
+            state: restarted

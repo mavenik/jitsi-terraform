@@ -1,0 +1,79 @@
+- name: Provision Jitsi standalone server
+  hosts: default
+  become: true
+
+  tasks:
+    - name: Copy configuration files
+      copy:
+        src: ./rootfs/
+        dest: /
+
+    - name: Disable IPV6
+      block:
+        - name: Disable net.ipv6.conf.all.disable_ipv6
+          sysctl:
+            name: net.ipv6.conf.all.disable_ipv6
+            value: "1"
+            state: present
+        - name: Disable net.ipv6.conf.default.disable_ipv6
+          sysctl:
+            name: net.ipv6.conf.default.disable_ipv6
+            value: "1"
+            state: present
+    - name: Set Hostname
+      block:
+        - hostname:
+            name: "{{ domain_name }}"
+        - template:
+            src: ./templates/hosts.j2
+            dest: /etc/hosts
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+    - name: Install apt prerequisites
+      block:
+        - name: Set debconf selection jvb-hostname
+          debconf:
+            name: jitsi-videobridge
+            question: jitsi-videobridge/jvb-hostname
+            value: "{{ domain_name }}"
+            vtype: string
+        - name: Set debconf selection cert-choice
+          debconf:
+            name: jitsi-meet-web-config
+            question: jitsi-meet/cert-choice
+            value: "Generate a new self-signed certificate"
+            vtype: select
+        - name: Install Jitsi apt key
+          apt_key:
+            url: https://download.jitsi.org/jitsi-key.gpg.key
+            state: present
+        - apt_repository:
+            repo: deb https://download.jitsi.org stable/
+            state: present
+        - name: Update cache
+          apt:
+            update_cache: yes
+        - name: Download certbot-auto
+          get_url:
+            url: https://dl.eff.org/certbot-auto
+            dest: /usr/local/sbin/certbot-auto
+            mode: '0755'
+        - name: Install packages
+          apt:
+            pkg:
+              - openjdk-8-jre-headless
+              - python
+              - python-dev
+              - virtualenv
+              - python-virtualenv
+              - gcc
+              - libaugeas0
+              - augeas-lenses
+              - libssl-dev
+              - openssl
+              - libffi-dev
+              - python-cryptography
+              - ca-certificates
+              - nginx
+              - jitsi-meet

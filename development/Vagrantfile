@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# This will launch a box with the image placed at
+# output-vagrant/package.box
+# It will execute ansible playbooks via ansible provisioner
+#
+# Use this Vagrantfile to test your provisioners locally
+
+Vagrant.configure("2") do |config|
+  config.vm.define "default" do |output|
+    output.vm.network "public_network", bridge: "en1: Wi-Fi (AirPort)", ip:"192.168.1.212"
+    output.vm.box = "packer_vagrant_jitsi"
+    output.vm.box_url = "file://../packer/output-vagrant/package.box"
+    config.ssh.insert_key = false
+    config.vm.provision "shell", inline: "sudo ifconfig eth1 mtu 96"
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "../playbooks/jitsi.yml"
+      ansible.host_vars = {
+        "default" => {
+          "domain_name" => "abc.meet.lanjewar.com",
+          "admin_username" => "admin",
+          "admin_password" => "passw0rd",
+          "turn_secret" => "turns123",
+          "jicofo_secret" => "jocofos123",
+          "jicofo_focus_password" => "jicofoFocus123",
+          "jvb_secret" => "jvbs123",
+          "jvb_nickname" => "asdfghjklqwertyuui",
+          "public_ip" => "192.168.1.212",
+          "email" => "nikhil@lanjewar.com",
+          "local_mode" => true
+        }
+      }
+    end
+  end
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+end

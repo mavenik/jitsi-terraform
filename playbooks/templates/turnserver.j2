@@ -1,0 +1,14 @@
+# jitsi-meet coturn config. Do not modify this line
+use-auth-secret
+keep-address-family
+static-auth-secret={{turn_secret}}
+realm={{domain_name}}
+cert=/etc/jitsi/meet/{{domain_name}}.crt
+pkey=/etc/jitsi/meet/{{domain_name}}.key
+
+no-tcp
+listening-port=4446
+tls-listening-port=4445
+external-ip={{public_ip}}
+
+syslog

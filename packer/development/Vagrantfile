@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrant configuration to launch a virtual machine from the base box that packer uses
+# This can be used to test provisioners that have been implemented with packer
+Vagrant.configure("2") do |config|
+  config.vm.define "jitsi" do |node|
+    node.vm.box = "bento/ubuntu-18.04"
+    node.vm.hostname = "jitsi"
+    # Bridged network
+    node.vm.network "public_network", bridge: "en1: Wi-Fi (AirPort)", ip:"192.168.1.212"
+    # Provider-specific configuration
+    node.vm.provider "virtualbox" do |vb|
+      # Customize the amount of memory on the VM
+      vb.memory = "2048"
+      # Specify machine name
+      vb.name = "jitsi"
+    end
+  end
+end
