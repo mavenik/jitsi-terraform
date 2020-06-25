@@ -3,6 +3,10 @@ provider "aws" {
   region  = var.aws_region
 }
 
+locals {
+  subdomain = length(var.subdomain) == 0 ? random_id.server_id.hex : var.subdomain
+}
+
 data "template_file" "stream_record" {
   template = file("./templates/jibri/stream_record.tpl")
   vars = {
@@ -69,7 +73,7 @@ data "template_file" "install_script" {
     email_address             = "${var.email_address}"
     admin_username            = "${var.admin_username}"
     admin_password            = "${var.admin_password}"
-    domain_name               = "${random_id.server_id.hex}.${var.parent_subdomain}"
+    domain_name               = "${local.subdomain}.${var.parent_subdomain}"
     jibri_installation_script = var.enable_recording_streaming ? data.template_file.install_jibri.rendered : "echo \"Jibri installation is disabled\" >> /debug.txt"
     reboot_script             = var.enable_recording_streaming ? "echo \"Rebooting...\" >> /debug.txt\nreboot" : "echo \".\" >> /debug.txt"
   }
@@ -103,7 +107,7 @@ resource "aws_instance" "jitsi" {
   key_name               = var.enable_ssh_access ? var.ssh_key_name : null
   user_data              = data.template_file.install_script.rendered
   tags = {
-    Name = "jitsi-meet-server-${random_id.server_id.hex}"
+    Name = "jitsi-meet-server-${local.subdomain}"
   }
 }
 
@@ -119,7 +123,7 @@ resource "random_id" "server_id" {
 
 resource "aws_route53_record" "jitsi" {
   zone_id = data.aws_route53_zone.parent_subdomain.zone_id
-  name    = "${random_id.server_id.hex}.${var.parent_subdomain}"
+  name    = "${local.subdomain}.${var.parent_subdomain}"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.jitsi.public_ip]
