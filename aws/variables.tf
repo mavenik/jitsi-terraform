@@ -102,3 +102,9 @@ variable "rtmp_stream_urls" {
   type        = list
   default     = []
 }
+
+variable "subdomain" {
+  description = "(Optional) Subdomain under a parent domain to host this instance"
+  type        = string
+  default     = ""
+}
