@@ -31,6 +31,12 @@ admin_password = "somestrongpassword"
 #--------------------------------------------------------------
 parent_subdomain = "meet.mydomain.com"
 
+#---------------------------------------------------------------------------
+# (Optional) Subdomain under parent domain under which Jitsi will be hosted
+# Uses a random ID if this was not set
+# --------------------------------------------------------------------------
+# subdomain = "dev"
+
 #-------------------------------------------------------------
 # SSH access configuration for debugging
 #-------------------------------------------------------------
