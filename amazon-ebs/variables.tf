@@ -26,13 +26,13 @@ variable "admin_password" {
 variable "enable_ssh_access" {
   description = "Whether to allow SSH access or not. Requires SSH Key to be imported to AWS Console."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "ssh_key_name" {
   description = "(Optional) SSH Key Pair name as set up in AWS. This is for debugging with SSH access."
   type        = string
-  default     = null
+  default = "jitsi"
 }
 
 variable "instance_type" {

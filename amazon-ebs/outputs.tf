@@ -1,5 +1,5 @@
 output "fqdn" {
-  value = aws_route53_record.jitsi.name
+  value = module.dns.fqdn
 }
 output "public_ip" {
   value = aws_instance.jitsi.public_ip

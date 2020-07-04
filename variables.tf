@@ -14,9 +14,9 @@ variable "admin_password" {
 }
 
 variable "enable_recording_streaming" {
-  description = "Enables recording and streaming capability on Jitsi Meet"
-  type        = bool
-  default     = false
+  description = "(Optional) Enable/disable streaming and recording capability over RTMP"
+  type = bool
+  default = false
 }
 
 variable "record_all_streaming" {

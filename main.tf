@@ -16,25 +16,25 @@ locals {
 resource "random_password" "turn_secret" {
   length = 8
   special = true
-  override_special = "!@#$%^&*(){}:<>?"
+  override_special = "!@#$=-"
 }
 
 resource "random_password" "jicofo_secret" {
   length = 8
   special = true
-  override_special = "!@#$%^&*(){}:<>?"
+  override_special = "!@#$=-"
 }
 
 resource "random_password" "jicofo_focus_password" {
   length = 8
   special = true
-  override_special = "!@#$%^&*(){}:<>?"
+  override_special = "!@#$=-"
 }
 
 resource "random_password" "jvb_secret" {
   length = 8
   special = true
-  override_special = "!@#$%^&*(){}:<>?"
+  override_special = "!@#$=-"
 }
 
 resource "random_id" "jvb_nickname"{
