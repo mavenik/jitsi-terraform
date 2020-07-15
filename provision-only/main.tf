@@ -1,16 +1,10 @@
-module "subdomain" {
-  source = "../subdomain"
-  subdomain = var.subdomain
-}
-
 module "dns" {
   source = "../cloudflare/dns"
-  depends_on = [module.subdomain.value]
   cloudflare_api_token = var.cloudflare_api_token
   cloudflare_zone_id = var.cloudflare_zone_id
-  jitsi_domain = module.subdomain.value
+  jitsi_domain = var.subdomain
   jitsi_public_ip = var.jitsi_public_ip
-  turn_domain = "turn.${module.subdomain.value}"
+  turn_domain = "turn.${var.subdomain}"
   turn_public_ip = var.turn_public_ip
   has_dedicated_turnserver = var.has_dedicated_turnserver
 }

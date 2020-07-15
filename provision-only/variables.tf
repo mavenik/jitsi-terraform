@@ -1,7 +1,6 @@
 variable "subdomain" {
   description = "(Optional) Subdomain at which a Jitsi server will be hosted"
   type = string
-  default = ""
 }
 
 variable "cloudflare_api_token" {
