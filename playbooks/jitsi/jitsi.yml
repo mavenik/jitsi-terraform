@@ -135,6 +135,7 @@
           get_url:
             url: "{{interface_watermark_image_url}}"
             dest: /usr/share/jitsi-meet/images/watermark.png
+            force: yes
         - name: Set up interface template
           template:
             src: ./templates/jitsi_interface_config.j2
