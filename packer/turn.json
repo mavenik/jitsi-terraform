@@ -5,13 +5,13 @@
       "source_path": "bento/ubuntu-18.04",
       "provider": "virtualbox",
       "type": "vagrant",
-      "output_dir": "output-vagrant-jitsi"
+      "output_dir": "output-vagrant-turn"
     },
     {
       "region": "{{user `aws_region`}}",
       "type": "amazon-ebs",
-      "ami_name": "packer-jitsi-ami-{{timestamp}}",
-      "instance_type": "m5.xlarge",
+      "ami_name": "packer-turn-ami-{{timestamp}}",
+      "instance_type": "t3.micro",
       "source_ami_filter": {
         "filters": {
           "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
@@ -28,17 +28,12 @@
     }
   ],
   "variables": {
-    "domain_name": "meet.example.com",
     "aws_region": "ap-south-1"
   },
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "./playbooks/jitsi.yml",
-      "extra_arguments": [
-        "--extra-vars",
-        "domain_name={{user `domain_name`}}"
-      ]
+      "playbook_file": "./playbooks/turn.yml"
     }
   ]
 }

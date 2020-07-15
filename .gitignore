@@ -6,5 +6,5 @@ terraform.tfstate.backup
 terraform.tfvars
 *.auto.tfvars
 .DS_Store
-output-vagrant
+output-vagrant*
 .vagrant

@@ -8,10 +8,10 @@
 # Use this Vagrantfile to test your provisioners locally
 
 Vagrant.configure("2") do |config|
-  config.vm.define "default" do |output|
+  config.vm.define "jitsi" do |output|
     output.vm.network "public_network", bridge: "en1: Wi-Fi (AirPort)", ip:"192.168.1.212"
     output.vm.box = "packer_vagrant_jitsi"
-    output.vm.box_url = "file://../packer/output-vagrant/package.box"
+    output.vm.box_url = "file://../packer/output-vagrant-jitsi/package.box"
     config.ssh.insert_key = false
     config.vm.provision "shell", inline: "sudo ifconfig eth1 mtu 96"
     config.vm.provision "file", source: "../playbooks", destination: "/tmp/"
@@ -35,25 +35,16 @@ Vagrant.configure("2") do |config|
     config.vm.provision "file", source: "host_vars.json", destination: "/tmp/playbooks/host_vars.json"
     config.vm.provision "shell", inline: "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 --extra-vars '@/tmp/playbooks/host_vars.json' /tmp/playbooks/jitsi.yml"
     config.vm.provision "shell", inline: "rm -rf /tmp/playbooks"
-#
-#    config.vm.provision "ansible" do |ansible|
-#      ansible.playbook = "../playbooks/jitsi.yml"
-#      ansible.host_vars = {
-#        "default" => {
-#          "domain_name" => "abc.meet.lanjewar.com",
-#          "admin_username" => "admin",
-#          "admin_password" => "passw0rd",
-#          "turn_secret" => "turns123",
-#          "jicofo_secret" => "jocofos123",
-#          "jicofo_focus_password" => "jicofoFocus123",
-#          "jvb_secret" => "jvbs123",
-#          "jvb_nickname" => "asdfghjklqwertyuui",
-#          "public_ip" => "192.168.1.212",
-#          "email" => "nikhil@lanjewar.com",
-#          "local_mode" => true
-#        }
-#      }
-#    end
   end
+
+  config.vm.define "coturn" do |coturn|
+    coturn.vm.network "public_network", bridge: "en1: Wi-Fi (AirPort)", ip: "192.168.1.213"
+    coturn.vm.box = "packer_vagrant_coturn"
+    cotrun.vm.box_url = "file://../packer/output-vagrant-turn/package.box"
+    config.ssh.insert_key = false
+    config.vm.provision "shell", inline: "sudo ifconfig eth1 mtu 96"
+    config.vm.provision "file", source: "../playbooks/coturn", destination: "/tmp"
+  end
+
   config.vm.synced_folder ".", "/vagrant", disabled: true
 end

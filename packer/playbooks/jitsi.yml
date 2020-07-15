@@ -1,5 +1,5 @@
 - name: Provision Jitsi standalone server
-  hosts: default
+  hosts: all
   become: true
 
   tasks:

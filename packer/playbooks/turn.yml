@@ -1,0 +1,30 @@
+- name: Provision a dedicated TURN Server
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Disable IPV6
+      block:
+        - name: Disable net.ipv6.conf.all.disable_ipv6
+          sysctl:
+            name: net.ipv6.conf.all.disable_ipv6
+            value: "1"
+            state: present
+        - name: Disable net.ipv6.conf.default.disable_ipv6
+          sysctl:
+            name: net.ipv6.conf.default.disable_ipv6
+            value: "1"
+            state: present
+    - name: Install Coturn
+      apt:
+        update_cache: yes
+        pkg:
+          - coturn
+    - name: Add Apt repository for certbot
+      apt_repository:
+        repo: ppa:certbot/certbot
+        update_cache: yes
+    - name: Install certbot
+      apt:
+        pkg:
+          - certbot
