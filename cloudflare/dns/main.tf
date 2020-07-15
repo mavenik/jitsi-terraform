@@ -11,7 +11,7 @@ resource "cloudflare_record" "jitsi" {
 }
 
 resource "cloudflare_record" "turn" {
-  count = length(var.turn_domain) > 0 && length(var.turn_public_ip) > 0 ? 1 : 0
+  count = var.has_dedicated_turnserver ? 1 : 0
   zone_id = var.cloudflare_zone_id
   name = var.turn_domain
   value = var.turn_public_ip

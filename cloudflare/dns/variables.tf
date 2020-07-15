@@ -30,3 +30,9 @@ variable "turn_public_ip" {
   type = string
   default = ""
 }
+
+variable "has_dedicated_turnserver" {
+  description = "(Optional) Whether this Jitsi server has a dedicated TURN server or not"
+  type = bool
+  default = false
+}
