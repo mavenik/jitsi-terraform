@@ -79,6 +79,17 @@ resource "null_resource" "ansible" {
       private_key = file(var.ssh_key_path)
     }
   }
+
+  provisioner "remote-exec" {
+    inline = ["rm -rf /tmp/jitsi"]
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      host = var.host_ip
+      private_key = file(var.ssh_key_path)
+    }
+  }
+
 }
 
 resource "random_id" "jibriauthpass" {
