@@ -5,10 +5,21 @@ muc_mapper_domain_base = "{{domain_name}}";
 
 turncredentials_secret = "{{turn_secret}}";
 
+{% if has_dedicated_turnserver %}
+turncredentials_port = 443;
+turncredentials_ttl = 86400;
+{% endif %}
+
 turncredentials = {
+  {% if has_dedicated_turnserver %}
+  { type = "stun", host = "{{turndomain}}"},
+  { type = "turn", host = "{{turndomain}}", port = 443},
+  { type = "turns", host = "{{turndomain}}", port = "443", transport = "tcp" }
+  {% else %}
   { type = "stun", host = "{{domain_name}}", port = "4446" },
   { type = "turn", host = "{{domain_name}}", port = "4446", transport = "udp" },
-  { type = "turns", host = "{{domain_name}}", port = "443", transport = "tcp" }
+  { type = "turns", host = "{{domain_name}}", port = "4445", transport = "tcp" }
+  {% endif %}
 };
 
 cross_domain_bosh = false;
@@ -18,7 +29,11 @@ local_interfaces = {"127.0.0.1"};
 
 VirtualHost "{{domain_name}}"
         -- enabled = false -- Remove this line to enable this host
+{% if is_secure_domain %}
         authentication = "internal_plain"
+{% else %}
+        authentication = "anonymous"
+{% endif %}
         -- Properties below are modified by jitsi-meet-tokens package config
         -- and authentication above is switched to "token"
         --app_id="example_app_id"
@@ -81,7 +96,9 @@ Component "speakerstats.{{domain_name}}" "speakerstats_component"
 Component "conferenceduration.{{domain_name}}" "conference_duration_component"
     muc_component = "conference.{{domain_name}}"
 
+{% if is_secure_domain %}
 VirtualHost "guest.{{domain_name}}"
     authentication = "anonymous"
     allow_empty_token = true
     c2s_require_encryption = false
+{% endif %}

@@ -10,3 +10,13 @@ data "aws_security_groups" "jitsi" {
                 )
   }
 }
+
+data "aws_security_groups" "turn" {
+  filter {
+    name = "group-name"
+    values = [
+              "allow_connections_jitsi-meet-ssh",
+              "allow_connections_jitsi-turn"
+             ]
+  }
+}

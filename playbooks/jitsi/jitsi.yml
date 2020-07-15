@@ -75,6 +75,7 @@
       shell: "prosodyctl register jvb auth.{{domain_name}} {{jvb_secret}}"
     - name: "Register moderator"
       shell: "prosodyctl register {{admin_username}} {{domain_name}} {{admin_password}}"
+      when: is_secure_domain
     - name: Copy Jitsi templates
       block:
         - template:
@@ -128,6 +129,16 @@
     - name: Invoke Let's Encrypt install script
       shell: "echo {{email}} | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh"
       when: local_mode is not defined or not local_mode
+    - name: Customize web interface
+      block:
+        - name: Download watermark image
+          get_url:
+            url: "{{interface_watermark_image_url}}"
+            dest: /usr/share/jitsi-meet/images/watermark.png
+        - name: Set up interface template
+          template:
+            src: ./templates/jitsi_interface_config.j2
+            dest: /usr/share/jitsi-meet/interface_config.js
     - name: Restart services
       block:
         - systemd:

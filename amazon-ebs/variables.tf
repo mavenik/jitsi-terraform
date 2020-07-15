@@ -113,3 +113,57 @@ variable "ssh_key_path" {
   description = "SSH Private Key Path"
   type = string
 }
+
+variable "has_dedicated_turnserver" {
+  description = "Whether this setup has a dedicated TURN server or not"
+  type = bool
+  default = false
+}
+
+variable "turn_instance_type" {
+  description = "TURN instance type"
+  type = string
+  default = "t3.micro"
+}
+
+variable "is_secure_domain" {
+  description = "Enable/disable secure domain"
+  type = bool
+  default = true
+}
+
+variable "interface_background_color" {
+  description = "(Optional) Background color of the interface"
+  type = string
+  default = "#474747"
+}
+
+variable "interface_remote_display_name" {
+  description = "(Optional) Remote display name during call"
+  type = string
+  default = "Fellow Jitser"
+}
+
+variable "interface_watermark_link" {
+  description = "(Optional) Link on watermark image"
+  type = string
+  default = "https://jitsi.org"
+}
+
+variable "interface_app_name" {
+  description = "(Optional) App Name to be displayed"
+  type = string
+  default = "Jitsi Meet"
+}
+
+variable "interface_provider_name" {
+  description = "(Optional) Provider name to be displayed on the interface"
+  type = string
+  default = "Jitsi"
+}
+
+variable "interface_watermark_image_url" {
+  description = "(Optional) Watermark logo URL"
+  type = string
+  default = "https://meet.jit.si/images/watermark.png"
+}

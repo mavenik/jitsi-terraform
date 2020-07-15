@@ -1,0 +1,28 @@
+- name: Provision dedicated TURN server
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Set Hostname
+      block:
+        - hostname:
+            name: "{{ domain_name }}"
+        - template:
+            src: ./templates/hosts.j2
+            dest: /etc/hosts
+    - name: Set TURN server configuration
+      block:
+        - template:
+            src: ./templates/turnserver.j2
+            dest: /etc/turnserver.conf
+        - copy:
+            src: ./templates/coturn
+            dest: /etc/default/coturn
+    - name: Generate Let's Encrypt certificates
+      shell: "certbot certonly --standalone --preferred-challenges http --deploy-hook \"systemctl restart coturn\" --non-interactive --agree-tos --email \"{{email}}\" -d {{ domain_name }}"
+    - name: Restart services
+      block:
+        - systemd:
+            name: coturn
+            state: restarted

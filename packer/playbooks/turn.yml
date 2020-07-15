@@ -27,4 +27,7 @@
     - name: Install certbot
       apt:
         pkg:
+          - ansible
           - certbot
+          - libssl-dev
+          - openssl

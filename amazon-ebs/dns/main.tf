@@ -9,3 +9,12 @@ resource "aws_route53_record" "jitsi" {
   ttl     = "300"
   records = [var.public_ip]
 }
+
+resource "aws_route53_record" "turn" {
+  count = var.has_dedicated_turnserver ? 1 : 0
+  zone_id = data.aws_route53_zone.parent_subdomain.zone_id
+  name    = "${var.turndomain}.${var.parent_subdomain}"
+  type    = "A"
+  ttl     = "300"
+  records = [var.turnserver_ip]
+}
