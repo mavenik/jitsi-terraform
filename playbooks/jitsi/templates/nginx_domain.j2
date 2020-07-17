@@ -17,8 +17,8 @@ server {
     }
 }
 server {
-    listen 4444 ssl http2;
-    listen [::]:4444 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name {{domain_name}};
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

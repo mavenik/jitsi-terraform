@@ -27,6 +27,10 @@ consider_bosh_secure = true;
 https_ports = { }; -- Remove this line to prevent listening on port 5284
 local_interfaces = {"127.0.0.1"};
 
+consider_websocket_secure = true;
+cross_domain_websocket = true;
+component_interfaces = { "0.0.0.0" };
+
 VirtualHost "{{domain_name}}"
         -- enabled = false -- Remove this line to enable this host
 {% if is_secure_domain %}
@@ -56,11 +60,13 @@ VirtualHost "{{domain_name}}"
             "speakerstats";
             "turncredentials";
             "conference_duration";
+            "websocket";
+            "smacks";
         }
         c2s_require_encryption = false
 
 Component "conference.{{domain_name}}" "muc"
-    storage = "none"
+    storage = "internal"
     modules_enabled = {
         "muc_meeting_id";
         "muc_domain_mapper";
@@ -69,16 +75,18 @@ Component "conference.{{domain_name}}" "muc"
     admins = { "focus@auth.{{domain_name}}" }
     muc_room_locking = false
     muc_room_default_public_jids = true
+    muc_room_cache_size = 100
 
 -- internal muc component
 Component "internal.auth.{{domain_name}}" "muc"
-    storage = "none"
+    storage = "internal"
     modules_enabled = {
       "ping";
     }
     admins = { "focus@auth.{{domain_name}}", "jvb@auth.{{domain_name}}" }
     muc_room_locking = false
     muc_room_default_public_jids = true
+    muc_room_cache_size = 100
 
 VirtualHost "auth.{{domain_name}}"
     ssl = {
@@ -95,6 +103,9 @@ Component "speakerstats.{{domain_name}}" "speakerstats_component"
 
 Component "conferenceduration.{{domain_name}}" "conference_duration_component"
     muc_component = "conference.{{domain_name}}"
+
+Component "jitsi-videobridge.{{domain_name}}"
+    component_secret = "{{jvb_secret}}"
 
 {% if is_secure_domain %}
 VirtualHost "guest.{{domain_name}}"

@@ -99,6 +99,10 @@
         dest: /etc/turnserver.conf
     - name: Set Nginx configuration
       block:
+        - name: Remove multiplexer config to support websockets on Chrome
+          file:
+            path: /etc/nginx/modules-enabled/60-jitsi-meet.conf
+            state: absent
         - template:
             src: ./templates/nginx_domain.j2
             dest: "/etc/nginx/sites-available/{{domain_name}}.conf"

@@ -1,3 +1,13 @@
+terraform {
+  backend "s3" {
+    bucket         = "jitsi-terraform-state-provision-only"
+    key            = "provision-only/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "jitsi-terraform-provision-only-locks"
+    encrypt        = true
+  }
+}
+
 module "dns" {
   source = "../cloudflare/dns"
   cloudflare_api_token = var.cloudflare_api_token

@@ -51,6 +51,14 @@
         - apt_repository:
             repo: deb https://download.jitsi.org stable/
             state: present
+        - name: Install prosody apt key
+          apt_key:
+            url: https://prosody.im/files/prosody-debian-packages.key
+            state: present
+        - name: Add prosody repository
+          apt_repository:
+            repo: deb https://packages.prosody.im/debian bionic main
+            state: present
         - name: Update cache
           apt:
             update_cache: yes
@@ -77,6 +85,7 @@
               - python-cryptography
               - ca-certificates
               - nginx
+              - prosody
               - jitsi-meet
         - name: Invoke Let's Encrypt install script
           shell: "echo mail@example.com | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh"
