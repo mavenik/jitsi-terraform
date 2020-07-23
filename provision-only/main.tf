@@ -24,6 +24,7 @@ module "secrets" {
 }
 
 module "installer" {
+  count = 0
   source = "./install"
   jitsi_public_ip = var.jitsi_public_ip
   turn_public_ip = var.turn_public_ip
@@ -32,7 +33,8 @@ module "installer" {
 }
 
 module "turnprovisioner" {
-  count = var.has_dedicated_turnserver ? 1 : 0
+  count = 0
+#  count = var.has_dedicated_turnserver ? 1 : 0
   source = "../turn"
   depends_on = [module.installer, module.dns.turn_fqdn]
   domain_name = module.dns.turn_fqdn
@@ -44,6 +46,7 @@ module "turnprovisioner" {
 }
 
 module "jitsi" {
+  count = 0
   source = "../"
   depends_on = [module.installer, module.dns.jitsi_fqdn]
   domain_name = module.dns.jitsi_fqdn
