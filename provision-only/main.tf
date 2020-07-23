@@ -14,7 +14,7 @@ module "dns" {
   cloudflare_zone_id = var.cloudflare_zone_id
   jitsi_domain = var.subdomain
   jitsi_public_ip = var.jitsi_public_ip
-  turn_domain = "turnrelay-${var.subdomain}"
+  turn_domain = "turn"
   turn_public_ip = var.turn_public_ip
   has_dedicated_turnserver = var.has_dedicated_turnserver
 }
