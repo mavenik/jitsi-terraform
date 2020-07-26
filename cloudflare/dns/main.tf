@@ -17,3 +17,15 @@ resource "cloudflare_record" "turn" {
   value = var.turn_public_ip
   type = "A"
 }
+
+locals {
+  # gh_ip = ["185.199.108.153", "185.199.109.153", "185.199.110.153", "185.199.111.153"] 
+  gh_ip = [] 
+}
+resource "cloudflare_record" "root" {
+  count = length(local.gh_ip)
+  zone_id = var.cloudflare_zone_id
+  name = "@"
+  value = local.gh_ip[count.index]
+  type = "A"
+}

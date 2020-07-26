@@ -16,7 +16,7 @@ module "dns" {
   public_ip = aws_instance.jitsi.public_ip
   
   has_dedicated_turnserver = var.has_dedicated_turnserver
-  turndomain = var.has_dedicated_turnserver ? "turn.${module.subdomain.value}" : ""
+  turndomain = var.has_dedicated_turnserver ? "turnrelay-${module.subdomain.value}" : ""
   turnserver_ip = var.has_dedicated_turnserver ? join("", module.turnserver.*.public_ip) : ""
 }
 
@@ -31,7 +31,7 @@ module "secrets" {
 }
 
 module "turnserver" {
-  count = var.has_dedicated_turnserver ? 1 : 0
+#  count = var.has_dedicated_turnserver ? 1 : 0
   depends_on = [module.subdomain.value]
   source = "./turn"
   ssh_key_name = var.ssh_key_name
@@ -41,7 +41,8 @@ module "turnserver" {
 }
 
 module "turnprovisioner" {
-  count = var.has_dedicated_turnserver ? 1 : 0
+#  count = var.has_dedicated_turnserver ? 1 : 0
+  count = 0
   source = "../turn"
   depends_on = [module.dns.turnfqdn]
   domain_name = module.dns.turnfqdn
@@ -53,6 +54,7 @@ module "turnprovisioner" {
 }
 
 module "jitsi" {
+  count = 0
   source = "../"
   depends_on = [module.dns.fqdn]
   domain_name = module.dns.fqdn
@@ -77,16 +79,28 @@ module "jitsi" {
 data "aws_ami" "packer_jitsi" {
   most_recent = true
 
+#  filter {
+#    name   = "name"
+#    values = ["packer-jitsi-ami-*"]
+#  }
+#  filter {
+#    name   = "virtualization-type"
+#    values = ["hvm"]
+#  }
+#
+#  owners = ["610596688011"]
+
   filter {
     name   = "name"
-    values = ["packer-jitsi-ami-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
 
-  owners = ["610596688011"]
+  owners = ["099720109477"]
+
 }
 
 resource "aws_instance" "jitsi" {

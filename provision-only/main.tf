@@ -1,10 +1,20 @@
+terraform {
+  backend "s3" {
+    bucket         = "jitsi-terraform-state-provision-only"
+    key            = "provision-only/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "jitsi-terraform-provision-only-locks"
+    encrypt        = true
+  }
+}
+
 module "dns" {
   source = "../cloudflare/dns"
   cloudflare_api_token = var.cloudflare_api_token
   cloudflare_zone_id = var.cloudflare_zone_id
   jitsi_domain = var.subdomain
   jitsi_public_ip = var.jitsi_public_ip
-  turn_domain = "turn.${var.subdomain}"
+  turn_domain = "turn"
   turn_public_ip = var.turn_public_ip
   has_dedicated_turnserver = var.has_dedicated_turnserver
 }
@@ -14,6 +24,7 @@ module "secrets" {
 }
 
 module "installer" {
+  count = 0
   source = "./install"
   jitsi_public_ip = var.jitsi_public_ip
   turn_public_ip = var.turn_public_ip
@@ -22,7 +33,8 @@ module "installer" {
 }
 
 module "turnprovisioner" {
-  count = var.has_dedicated_turnserver ? 1 : 0
+  count = 0
+#  count = var.has_dedicated_turnserver ? 1 : 0
   source = "../turn"
   depends_on = [module.installer, module.dns.turn_fqdn]
   domain_name = module.dns.turn_fqdn
@@ -34,6 +46,7 @@ module "turnprovisioner" {
 }
 
 module "jitsi" {
+  count = 0
   source = "../"
   depends_on = [module.installer, module.dns.jitsi_fqdn]
   domain_name = module.dns.jitsi_fqdn
