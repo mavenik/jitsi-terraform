@@ -3,8 +3,7 @@ terraform.tfstate.backup
 .terraform
 *.swp
 *.swo
-terraform.tfvars
-*.auto.tfvars
+*.tfvars
 .DS_Store
 output-vagrant*
 .vagrant
