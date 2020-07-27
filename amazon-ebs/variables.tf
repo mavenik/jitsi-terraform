@@ -141,7 +141,7 @@ variable "interface_background_color" {
 variable "interface_remote_display_name" {
   description = "(Optional) Remote display name during call"
   type = string
-  default = "Fellow Jitser"
+  default = "Fellow Jitster"
 }
 
 variable "interface_watermark_link" {
@@ -165,5 +165,23 @@ variable "interface_provider_name" {
 variable "interface_watermark_image_url" {
   description = "(Optional) Watermark logo URL"
   type = string
-  default = "https://meet.jit.si/images/watermark.png"
+  default = "images/watermark.png"
+}
+
+variable "interface_show_watermark" {
+  description = "(Optional) Enables/disables watermark"
+  type = bool
+  default = true
+}
+
+variable "interface_allow_shared_video" {
+  description = "(Optional) Enables/Disables share YouTube Video feature"
+  type = bool
+  default = true
+}
+
+variable "interface_disable_mobile_app" {
+  description = "(Optional) Enables/disables mobile app download screen"
+  type = bool
+  default = false
 }

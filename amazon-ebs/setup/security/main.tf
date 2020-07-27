@@ -1,5 +1,5 @@
 resource "aws_security_group" "allow_connections_jitsi-meet" {
-  name        = "allow_connections_jitsi-meet"
+  name        = "allow_connections_jitsi_meet"
   description = "Allow traffic on UDP 10000 (JVB) TCP 80/443 (HTTP/HTTPS) UDP 53 (DNS) UDP 4446 (STUN)"
 
   ingress {
@@ -59,7 +59,7 @@ resource "aws_security_group" "allow_connections_jitsi-meet" {
 }
 
 resource "aws_security_group" "allow_connections_jitsi-meet-ssh" {
-  name        = "allow_connections_jitsi-meet-ssh"
+  name        = "allow_connections_jitsi_meet-ssh"
   description = "Allows SSH access over port 22"
 
   ingress {
@@ -75,7 +75,7 @@ resource "aws_security_group" "allow_connections_jitsi-meet-ssh" {
 }
 
 resource "aws_security_group" "allow_connections_jitsi-meet-recording-streaming" {
-  name        = "allow_connections_jitsi-meet-recording-streaming"
+  name        = "allow_connections_jitsi_meet-recording-streaming"
   description = "Allows RTMP traffic on ports 1935 and 1936"
 
   egress {
@@ -98,7 +98,7 @@ resource "aws_security_group" "allow_connections_jitsi-meet-recording-streaming"
 }
 
 resource "aws_security_group" "allow_connections_jitsi-turn" {
-  name        = "allow_connections_jitsi-turn"
+  name        = "allow_connections_jitsi_turn"
   description = "Allow traffic on UDP 4446 (TURN/STUN UDP) TCP 443 (TURNS) UDP 53 for DNS and to UDP 10000 for outbound JVB"
 
   egress {

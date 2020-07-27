@@ -99,10 +99,6 @@
         dest: /etc/turnserver.conf
     - name: Set Nginx configuration
       block:
-        - name: Remove multiplexer config to support websockets on Chrome
-          file:
-            path: /etc/nginx/modules-enabled/60-jitsi-meet.conf
-            state: absent
         - template:
             src: ./templates/nginx_domain.j2
             dest: "/etc/nginx/sites-available/{{domain_name}}.conf"
@@ -135,11 +131,11 @@
       when: local_mode is not defined or not local_mode
     - name: Customize web interface
       block:
-        - name: Download watermark image
-          get_url:
-            url: "{{interface_watermark_image_url}}"
-            dest: /usr/share/jitsi-meet/images/watermark.png
-            force: yes
+        - name: Set up app.bundle.min.js
+          shell: "sed -e 's/function a(){return\"android\"===r.a.OS||\"ios\"===r.a.OS}/function a(){return false;}/' -i /usr/share/jitsi-meet/libs/app.bundle.min.js"
+          when: interface_disable_mobile_app
+          args:
+            warn: no
         - name: Set up interface template
           template:
             src: ./templates/jitsi_interface_config.j2

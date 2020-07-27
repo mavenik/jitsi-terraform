@@ -19,6 +19,9 @@ locals {
   "interface_app_name" = var.interface_app_name
   "interface_provider_name" = var.interface_provider_name
   "interface_watermark_image_url" = var.interface_watermark_image_url
+  "interface_show_watermark" = var.interface_show_watermark
+  "interface_allow_shared_video" = var.interface_allow_shared_video
+  "interface_disable_mobile_app" = var.interface_disable_mobile_app
   })
 }
 
