@@ -77,6 +77,9 @@ module "jitsi" {
   interface_disable_mobile_app = var.interface_disable_mobile_app
 }
 
+data "aws_caller_identity" "current_user" {
+}
+
 data "aws_ami" "packer_jitsi" {
   most_recent = true
 
@@ -89,7 +92,7 @@ data "aws_ami" "packer_jitsi" {
     values = ["hvm"]
   }
 
-  owners = ["610596688011"]
+  owners = [data.aws_caller_identity.current_user.account_id]
 
 #  filter {
 #    name   = "name"
