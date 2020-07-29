@@ -182,18 +182,11 @@ resource "aws_security_group" "allow_connections_jitsi-meet" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port   = 4446
-    to_port     = 4446
+    from_port   = 3478
+    to_port     = 3478
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  egress {
-    from_port   = 4446
-    to_port     = 4446
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   dynamic "egress" {
     for_each = var.enable_recording_streaming ? [1] : []
     content {

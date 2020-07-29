@@ -55,7 +55,7 @@ sed -e "s/\/\/ anonymousdomain: .*$/anonymousdomain: 'guest.$HOSTNAME',/" -i /et
 echo "org.jitsi.jicofo.auth.URL=XMPP:$HOSTNAME" >> /etc/jitsi/jicofo/sip-communicator.properties
 
 # Enable local STUN server
-sed -e "s/org\.ice4j\.ice\.harvest\.STUN_MAPPING_HARVESTER_ADDRESSES=.*/org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES=$HOSTNAME:4446/" -i /etc/jitsi/videobridge/sip-communicator.properties
+sed -e "s/org\.ice4j\.ice\.harvest\.STUN_MAPPING_HARVESTER_ADDRESSES=.*/org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES=$HOSTNAME:5349/" -i /etc/jitsi/videobridge/sip-communicator.properties
 
 echo "Enabling Moderator credentials for $ADMIN_USER" >> /debug.txt
 prosodyctl --config /etc/prosody/prosody.cfg.lua register $ADMIN_USER $HOSTNAME $ADMIN_PASSWORD
