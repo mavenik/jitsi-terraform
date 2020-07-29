@@ -1,0 +1,29 @@
+name: Run Packer validations
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packer/**'
+      - '!packer/**.md'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'packer/**'
+      - '!packer/**.md'
+
+jobs:
+  validate_packer:
+    container:
+      image: mavenik/ansible-packer-terraform:1.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate packer for Jitsi
+        run: |
+          cd packer
+          packer validate jitsi.json
+      - name: Validate packer for TURN
+        run: |
+          cd packer
+          packer validate turn.json

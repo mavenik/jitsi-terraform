@@ -1,0 +1,48 @@
+name: Run Terraform validations
+on:
+  push:
+    branches:
+      - master
+    ignore-paths:
+      - 'packer/**'
+      - '**.md'
+  pull_request:
+    branches:
+      - master
+    ignore-paths:
+      - 'packer/**'
+      - '**.md'
+
+jobs:
+  validate_terraform:
+    env:
+      AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+    container:
+      image: mavenik/ansible-packer-terraform:1.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Print credentials
+        run: |
+          echo "$AWS_ACCESS_KEY_ID"
+          echo "$AWS_SECRET_ACCESS_KEY"
+      - name: Validate Terraform for Amazon AWS
+        run: |
+          cd amazon-ebs
+          terraform init
+          terraform validate
+      - name: Validate Terraform for CloudFlare DNS
+        run: |
+          cd cloudflare/dns
+          terraform init
+          terraform validate
+      - name: Validate Terraform state management for provision-only configuration
+        run: |
+          cd provision-only/state
+          terraform init
+          terraform validate
+      - name: Validate Terraform for Provision-only
+        run: |
+          cd provision-only
+          terraform init
+          terraform validate
