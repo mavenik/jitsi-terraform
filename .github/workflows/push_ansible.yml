@@ -1,0 +1,35 @@
+name: Run Ansible validations
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**/playbooks/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**/playbooks/**'
+
+jobs:
+  validate_ansible:
+    container:
+      image: mavenik/ansible-packer-terraform:1.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate ansible for Jitsi
+        run: |
+          cd playbooks/jitsi
+          ansible-playbook --syntax-check jitsi.yml
+      - name: Validate ansible for TURN
+        run: |
+          cd playbooks/turn
+          ansible-playbook --syntax-check turn.yml
+      - name: Validate ansible for Jitsi's packer configuration
+        run: |
+          cd packer/playbooks
+          ansible-playbook --syntax-check jitsi.yml
+      - name: Validate ansible for TURN packer configuration
+        run: |
+          cd packer/playbooks
+          ansible-playbook --syntax-check turn.yml
