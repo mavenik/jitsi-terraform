@@ -8,6 +8,7 @@ on:
 
 jobs:
   create_buckets:
+    runs-on: ubuntu-18.04
     container:
       image: mavenik/ansible-packer-terraform:1.0
     steps:
