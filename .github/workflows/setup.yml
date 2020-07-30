@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Create jitsi-terraform-amazon-ebs-setup bucket
         run: |
-          export BUCKET_OUTPUT=$(aws s3 ls jitsi-terraform-amazon-ebs-setup 2>&1)
+          BUCKET_OUTPUT=$(aws s3 ls jitsi-terraform-amazon-ebs-setup 2>&1)
           echo $BUCKET_OUTPUT
           if echo $BUCKET_OUTPUT | grep -q 'NoSuchBucket'
           then
