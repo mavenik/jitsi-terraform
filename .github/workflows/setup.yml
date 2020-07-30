@@ -1,0 +1,23 @@
+name: Setup state buckets
+on: [push, pull_request]
+#on:
+#  workflow_dispatch:
+#    inputs:
+#      awsRegion:
+#        description: AWS Region for state buckets
+#        required: true
+#
+jobs:
+  create_buckets:
+    container:
+      image: mavenik/ansible-packer-terraform:1.0
+    steps:
+      - name: Create jitsi-terraform-amazon-ebs-setup bucket
+        run: |
+          if aws s3 ls jitsi-terraform-amazon-ebs-setup 2>&1 | grep -q ''NoSuchBucket''
+          then
+          echo "Bucket is absent. Creating..."
+          aws s3api create-bucket --bucket my-bucket --region ${{ github.event.inputs.awsRegion }}
+          else
+          echo "Bucket is present. Skipping creation."
+          fi
