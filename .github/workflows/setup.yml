@@ -14,7 +14,9 @@ jobs:
     steps:
       - name: Create jitsi-terraform-amazon-ebs-setup bucket
         run: |
-          if aws s3 ls jitsi-terraform-amazon-ebs-setup 2>&1 | grep -q 'NoSuchBucket'
+          export BUCKET_OUTPUT=$(aws s3 ls jitsi-terraform-amazon-ebs-setup 2>&1)
+          echo $BUCKET_OUTPUT
+          if echo $BUCKET_OUTPUT | grep -q 'NoSuchBucket'
           then
           echo "Bucket is absent. Creating..."
           aws s3api create-bucket --bucket my-bucket --region ${{ github.event.inputs.awsRegion }}
