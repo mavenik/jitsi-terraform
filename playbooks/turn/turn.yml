@@ -7,7 +7,7 @@
     - name: Set Hostname
       block:
         - hostname:
-            name: "{{ domain_name }}"
+            name: "{{ turndomain }}"
         - template:
             src: ./templates/hosts.j2
             dest: /etc/hosts
@@ -20,7 +20,7 @@
             src: ./templates/coturn
             dest: /etc/default/coturn
     - name: Generate Let's Encrypt certificates
-      shell: "certbot certonly --standalone --preferred-challenges http --deploy-hook \"systemctl restart coturn\" --non-interactive --agree-tos --email \"{{email}}\" -d {{ domain_name }}"
+      shell: "certbot certonly --standalone --preferred-challenges http --deploy-hook \"systemctl restart coturn\" --non-interactive --agree-tos --email \"{{email}}\" -d {{ turndomain }}"
     - name: Restart services
       block:
         - systemd:

@@ -16,8 +16,8 @@ module "dns" {
   public_ip = aws_instance.jitsi.public_ip
   
   has_dedicated_turnserver = var.has_dedicated_turnserver
-  turndomain = var.has_dedicated_turnserver ? "turnrelay-${module.subdomain.value}" : ""
-  turnserver_ip = var.has_dedicated_turnserver ? join("", module.turnserver.*.public_ip) : ""
+  turndomain = length(var.turndomain) == 0 ? "turn-${module.subdomain.value}" : var.turndomain
+  turnserver_ip = var.has_dedicated_turnserver ? join("", module.turnserver.*.public_ip) : aws_instance.jitsi.public_ip
 }
 
 module "security" {
@@ -60,11 +60,12 @@ module "jitsi" {
   admin_password = var.admin_password
   email_address = var.email_address
   host_ip = aws_instance.jitsi.public_ip
+  private_ip = aws_instance.jitsi.private_ip
   ssh_key_path = var.ssh_key_path
   enable_recording_streaming = var.enable_recording_streaming
   has_dedicated_turnserver = var.has_dedicated_turnserver
   turn_secret = module.secrets.turn_secret
-  turndomain = var.has_dedicated_turnserver ? module.dns.turnfqdn : ""
+  turndomain = module.dns.turnfqdn
   is_secure_domain = var.is_secure_domain
   interface_background_color = var.interface_background_color
   interface_remote_display_name = var.interface_remote_display_name

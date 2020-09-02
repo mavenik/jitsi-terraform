@@ -86,6 +86,7 @@
               - ca-certificates
               - nginx
               - prosody
+              - certbot
               - jitsi-meet
         - name: Invoke Let's Encrypt install script
           shell: "echo mail@example.com | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh"

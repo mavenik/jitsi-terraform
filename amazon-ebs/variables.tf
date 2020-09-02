@@ -120,6 +120,12 @@ variable "has_dedicated_turnserver" {
   default = false
 }
 
+variable "turndomain" {
+  description = "Domain name for TURN server"
+  type = string
+  default = ""
+}
+
 variable "turn_instance_type" {
   description = "TURN instance type"
   type = string

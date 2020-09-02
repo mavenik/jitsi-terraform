@@ -5,5 +5,5 @@ output "fqdn" {
 
 output "turnfqdn" {
   description = "FQDN of TURN Server"
-  value = join("", aws_route53_record.turn.*.fqdn)
+  value = aws_route53_record.turn.fqdn
 }

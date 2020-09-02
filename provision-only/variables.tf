@@ -19,10 +19,21 @@ variable "jitsi_public_ip" {
   type        = string
 }
 
+variable "jitsi_private_ip" {
+  description = "Private IP of Jitsi Server. Required for TURN configuration."
+  type = string
+}
+
 variable "turn_public_ip" {
   description = "(Optional) Public IP of TURN Server. Required if turn_domain is set."
   type = string
   default = ""
+}
+
+variable "turndomain" {
+  description = "(Optional) Public IP of TURN Server."
+  type = string
+  default = "turn"
 }
 
 variable "ssh_key_path" {
@@ -55,6 +66,29 @@ variable "has_dedicated_turnserver" {
   description = "Whether this setup has a dedicated TURN server or not"
   type = bool
   default = false
+}
+
+variable "has_additional_turn" {
+  type = bool
+  default = false
+}
+
+variable "additional_turn_domain" {
+  description = "Extra turn server domain"
+  type = string
+  default = ""
+}
+
+variable "additional_turn_public_ip" {
+  description = "Extra TURN server IP"
+  type = string
+  default = ""
+}
+
+variable "additional_turn_private_ip" {
+  description = "Extra TURN server private IP"
+  type = string
+  default = ""
 }
 
 variable "is_secure_domain" {

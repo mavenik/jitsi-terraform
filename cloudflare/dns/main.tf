@@ -11,10 +11,17 @@ resource "cloudflare_record" "jitsi" {
 }
 
 resource "cloudflare_record" "turn" {
-  count = var.has_dedicated_turnserver ? 1 : 0
   zone_id = var.cloudflare_zone_id
   name = var.turn_domain
   value = var.turn_public_ip
+  type = "A"
+}
+
+resource "cloudflare_record" "additional_turn" {
+  count = var.has_additional_turn ? 1 : 0
+  zone_id = var.cloudflare_zone_id
+  name = var.additional_turn_domain
+  value = var.additional_turn_public_ip
   type = "A"
 }
 

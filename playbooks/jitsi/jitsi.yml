@@ -93,15 +93,14 @@
         - template:
             src: ./templates/videobridge_sip_communicator.j2
             dest: /etc/jitsi/videobridge/sip-communicator.properties
-    - name: Set TURN server configuration
-      template:
-        src: ./templates/turnserver.j2
-        dest: /etc/turnserver.conf
     - name: Set Nginx configuration
       block:
         - template:
             src: ./templates/nginx_domain.j2
             dest: "/etc/nginx/sites-available/{{domain_name}}.conf"
+        - template:
+            src: ./templates/nginx_jitsi_module.j2
+            dest: "/etc/nginx/modules-enabled/60-jitsi-meet.conf"
         - file:
             src: "/etc/nginx/sites-available/{{domain_name}}.conf"
             dest: "/etc/nginx/sites-enabled/{{domain_name}}.conf"
@@ -129,6 +128,13 @@
     - name: Invoke Let's Encrypt install script
       shell: "echo {{email}} | /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh"
       when: local_mode is not defined or not local_mode
+    - name: Install TURN server certificate
+      shell: "certbot certonly --agree-tos --webroot -w /usr/share/jitsi-meet -d {{turndomain}}"
+      when: local_mode is not defined or not local_mode
+    - name: Set TURN server configuration
+      template:
+        src: ./templates/turnserver.j2
+        dest: /etc/turnserver.conf
     - name: Customize web interface
       block:
         - name: Set up app.bundle.min.js

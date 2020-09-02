@@ -9,6 +9,7 @@ locals {
   "jvb_nickname" = random_id.jvb_nickname.hex
   "email" = var.email_address
   "public_ip" = var.host_ip
+  "private_ip" = var.private_ip
   "has_dedicated_turnserver" = var.has_dedicated_turnserver
   "turn_secret" = var.turn_secret
   "turndomain" = var.turndomain

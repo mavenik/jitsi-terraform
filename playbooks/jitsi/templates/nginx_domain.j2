@@ -3,7 +3,7 @@ server_names_hash_bucket_size 64;
 server {
     listen 80;
     listen [::]:80;
-    server_name {{domain_name}};
+    server_name {{domain_name}} {{turndomain}};
 
     location ^~ /.well-known/acme-challenge/ {
        default_type "text/plain";
@@ -19,7 +19,7 @@ server {
 server {
     listen 4444 ssl http2;
     listen [::]:4444 ssl http2;
-    server_name {{domain_name}};
+    server_name {{domain_name}} {{turndomain}};
 
 # Mozilla Guideline v5.4, nginx 1.17.7, OpenSSL 1.1.1d, intermediate configuration
     ssl_protocols TLSv1.2 TLSv1.3;

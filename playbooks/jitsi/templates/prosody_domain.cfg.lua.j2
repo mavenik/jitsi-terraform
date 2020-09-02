@@ -6,9 +6,9 @@ muc_mapper_domain_base = "{{domain_name}}";
 turncredentials_secret = "{{turn_secret}}";
 
 turncredentials = {
-  { type = "stun", host = "{{domain_name}}", port = "443" },
-  { type = "turn", host = "{{domain_name}}", port = "443"},
-  { type = "turns", host = "{{domain_name}}", port = "443", transport = "tcp" }
+  { type = "stun", host = "{{turndomain}}", port = "443" },
+  { type = "turn", host = "{{turndomain}}", port = "443"},
+  { type = "turns", host = "{{turndomain}}", port = "443", transport = "tcp" }
 };
 
 cross_domain_bosh = false;

@@ -19,9 +19,9 @@ resource "null_resource" "jitsi" {
 }
 
 resource "null_resource" "turn" {
-  count = var.has_dedicated_turnserver ? 1 : 0
+  count = var.has_additional_turn ? 1 : 0
   triggers = {
-     instance_id = var.turn_public_ip
+     instance_id = var.additional_turn_public_ip
   }
   
   provisioner "remote-exec" {
@@ -29,12 +29,12 @@ resource "null_resource" "turn" {
     connection {
       type = "ssh"
       user = "ubuntu"
-      host = var.turn_public_ip
+      host = var.additional_turn_public_ip
       private_key = file(var.ssh_key_path)
     }
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.turn_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu ../packer/playbooks/turn.yml"
+    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.additional_turn_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu ../packer/playbooks/turn.yml"
   }
 }

@@ -36,3 +36,18 @@ variable "has_dedicated_turnserver" {
   type = bool
   default = false
 }
+
+variable "additional_turn_domain" {
+  type = string
+  default = ""
+}
+
+variable "additional_turn_public_ip" {
+  type = string
+  default = ""
+}
+
+variable "has_additional_turn" {
+  type = bool
+  default = false
+}

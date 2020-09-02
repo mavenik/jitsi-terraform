@@ -3,6 +3,11 @@ variable "domain_name" {
   type = string
 }
 
+variable "turn_domain" {
+  description = "Domain Name of TURN Server"
+  type = string
+}
+
 variable "turn_secret" {
   description = "Secret password for TURN server"
   type = string
@@ -10,6 +15,11 @@ variable "turn_secret" {
 
 variable "host_ip" {
   description = "IP Address of TURN Host"
+  type = string
+}
+
+variable "private_ip" {
+  description = "Private IP address of TURN Host"
   type = string
 }
 

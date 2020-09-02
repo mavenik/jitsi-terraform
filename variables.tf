@@ -86,6 +86,11 @@ variable "host_ip" {
   type = string
 }
 
+variable "private_ip" {
+  description = "Private IP of the server"
+  type = string
+}
+
 variable "has_dedicated_turnserver" {
   description = "(Optional) Whether this setup has a dedicated TURN Server or not"
   type = bool

@@ -2,7 +2,9 @@ locals {
   ansible_vars = jsonencode({
   "domain_name" = var.domain_name
   "turn_secret" = var.turn_secret
+  "turndomain" = var.turn_domain
   "public_ip" = var.host_ip
+  "private_ip" = var.private_ip
   "realm" = var.realm
   "email" = var.email
   })

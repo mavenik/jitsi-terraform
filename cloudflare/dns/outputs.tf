@@ -5,6 +5,9 @@ output "jitsi_fqdn" {
 
 output "turn_fqdn" {
   description = "FQDN for TURN server"
-  value = join("", cloudflare_record.turn.*.hostname)
+  value = cloudflare_record.turn.hostname
 }
 
+output "additional_turn_fqdn" {
+  value = join("",cloudflare_record.additional_turn.*.hostname)
+}
