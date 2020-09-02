@@ -14,7 +14,7 @@ resource "null_resource" "jitsi" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.jitsi_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu -e domain_name=meet.example.com ../../packer/playbooks/jitsi.yml"
+    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.jitsi_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu -e domain_name=meet.example.com ../packer/playbooks/jitsi.yml"
   }
 }
 
@@ -35,6 +35,6 @@ resource "null_resource" "turn" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.additional_turn_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu ../../packer/playbooks/turn.yml"
+    command = "ansible-playbook -e ansible_python_interpreter=/usr/bin/python3 -i '${var.additional_turn_public_ip},' --private-key ${var.ssh_key_path} -u ubuntu ../packer/playbooks/turn.yml"
   }
 }
